@@ -59,45 +59,50 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
 
             </android.support.design.widget.TextInputLayout>
 
+            <!--  Password Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <EditText
-                    android:id="@+id/password"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+                <EditText android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textSize="50sp" />
-
+                    android:hint="Password"
+                    android:textSize="40sp"/>
             </android.support.design.widget.TextInputLayout>
+
+            <TextView android:id="@+id/link_signup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="15dp"
+                android:text="No account yet? Create one"
+                android:gravity="center"
+                android:textSize="20dp"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:layout_marginTop="40dp"
+                android:layout_height="113dp"
+                android:layout_marginTop="15dp"
                 android:background="#0AA2CB"
                 android:baselineAligned="false"
                 android:lineSpacingExtra="20sp"
                 android:text="@string/action_sign_in"
                 android:textColor="#FFFFFF"
-                android:textSize="55sp"
+                android:textSize="45sp"
                 android:textStyle="bold"
                 android:visibility="visible"
                 tools:text="Log In" />
+
+
 
         </LinearLayout>
     </ScrollView>
@@ -105,19 +110,9 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="110dp"
-        android:layout_height="114dp"
+        android:layout_height="100dp"
         android:layout_alignTop="@+id/login_form"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/logo" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:text="Oldivity"
-        android:textColor="@android:color/black"
-        android:textSize="40sp"
-        app:fontFamily="cursive" />
 </RelativeLayout>
