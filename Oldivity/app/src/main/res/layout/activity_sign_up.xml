@@ -104,14 +104,13 @@
             <!-- Signup Button -->
             <Button
                 android:id="@+id/buttonOK"
-                android:layout_width="177dp"
-                android:layout_height="88dp"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
                 android:layout_marginTop="15dp"
                 android:background="#0AA2CB"
                 android:lineSpacingExtra="20sp"
                 android:text="Sign Up"
                 android:textColor="#FFFFFF"
-                android:layout_centerHorizontal="true"
                 android:textSize="30sp"
                 android:onClick="OK"
                 android:visibility="visible" />
