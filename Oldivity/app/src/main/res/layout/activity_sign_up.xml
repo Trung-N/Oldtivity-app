@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,7 +45,7 @@
                 android:layout_marginTop="15dp">
 
                 <EditText
-                    android:id="@+id/input_name"
+                    android:id="@+id/tFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
@@ -54,6 +53,21 @@
                     android:textSize="30sp" />
             </android.support.design.widget.TextInputLayout>
 
+            <!-- Name Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp">
+
+                <EditText
+                    android:id="@+id/tLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Last name"
+                    android:inputType="textPersonName"
+                    android:textSize="30sp" />
+            </android.support.design.widget.TextInputLayout>
 
             <!--  Email Label -->
             <android.support.design.widget.TextInputLayout
@@ -63,28 +77,11 @@
                 android:layout_marginTop="8dp">
 
                 <EditText
-                    android:id="@+id/input_email"
+                    android:id="@+id/tEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:textSize="30sp" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <!-- mobile number -->
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/input_mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Mobile Number"
-                    android:inputType="number"
                     android:textSize="30sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -96,7 +93,7 @@
                 android:layout_marginTop="8dp">
 
                 <EditText
-                    android:id="@+id/input_password"
+                    android:id="@+id/tPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
@@ -104,46 +101,19 @@
                     android:textSize="30sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <!-- Password Re-enter Label -->
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/input_reEnterPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Re-enter Password"
-                    android:inputType="textPassword"
-                    android:textSize="30sp" />
-            </android.support.design.widget.TextInputLayout>
-
             <!-- Signup Button -->
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/buttonOK"
                 android:layout_width="match_parent"
-                android:layout_height="113dp"
+                android:layout_height="90dp"
                 android:layout_marginTop="15dp"
                 android:background="#0AA2CB"
                 android:lineSpacingExtra="20sp"
                 android:text="Sign Up"
                 android:textColor="#FFFFFF"
-                android:textSize="45sp"
-                android:textStyle="bold"
+                android:textSize="30sp"
+                android:onClick="OK"
                 android:visibility="visible" />
-
-
-            <TextView
-                android:id="@+id/link_login"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:text="Already a member? Login"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:textSize="25dp" />
 
         </LinearLayout>
     </ScrollView>
