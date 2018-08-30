@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.common.oob.SignUp;
+
 
 public class MainActivity extends AppCompatActivity {
     private EditText etUserEmail;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void SignUP(View view) {
-        Intent intent = new Intent(MainActivity.this, SignUp.class);
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
 
