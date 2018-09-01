@@ -15,67 +15,103 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
 
     private EditText tFirstName, tLastName, tEmail, tPassword;
+    private String firstName, lastName, email, password;
     private FirebaseAuth mAuth;
+    private String uID;
+
+    private DatabaseReference Users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        //Get Firebase auth instance
+        //Get database & Firebase auth instance
         mAuth = FirebaseAuth.getInstance();
+        Users = FirebaseDatabase.getInstance().getReference("users");
 
         //User Inputs
-        tFirstName = (EditText) findViewById(R.id.tFirstName);
-        tLastName = (EditText) findViewById(R.id.tLastName);
-        tEmail = (EditText) findViewById(R.id.tEmail);
-        tPassword = (EditText) findViewById(R.id.tPassword);
+        tFirstName = findViewById(R.id.tFirstName);
+        tLastName = findViewById(R.id.tLastName);
+        tEmail = findViewById(R.id.tEmail);
+        tPassword = findViewById(R.id.tPassword);
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in and update UI accordingly.
+        /** unfinished */
+        FirebaseUser user = mAuth.getCurrentUser();
+        //updateUI(currentUser);
+    }
+
+    //When Signup button is pressed
     public void OK(View view) {
-        if (!validateForm()) {
+        if (!validateEntries()) {
             return;
         }
-        //Create user entry in database with authenticator
-        mAuth.createUserWithEmailAndPassword(tEmail.getText().toString(), tPassword.getText().toString())
-                .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+
+        firstName = tFirstName.getText().toString().trim();
+        lastName = tLastName.getText().toString().trim();
+        email = tEmail.getText().toString().trim();
+        password = tPassword.getText().toString().trim();
+
+        //Create user authenticator & entry in user database
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(SignUpActivity.this,
+                        new OnCompleteListener<AuthResult>() {
+
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign up success
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(SignUpActivity.this, "Account successfully created!",
-                                    Toast.LENGTH_SHORT).show();
+
+                            //Add user information to database with same unique ID as authenticator
                             FirebaseUser user = mAuth.getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(tFirstName.getText().toString() + " " + tLastName.getText().toString()).build();
-                            user.updateProfile(profileUpdates);
-                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                            // updateUI(user);
+                            uID = user.getUid();
+                            user newUser = new user(firstName, lastName, email);
+                            Users.child(uID).setValue(newUser);
+
+                            // Inform successful sign-up
+                            Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(SignUpActivity.this,
+                                    "Account successfully created!", Toast.LENGTH_SHORT).show();
+
+                            //Move to login page to sign in
+                            startActivity(new Intent(SignUpActivity.this,
+                                    MainActivity.class));
+
                         } else {
+
                             // If sign up fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
-                             //updateUI(null);
-                            }
+                        }
                     }
-                 });
+                });
     }
 
-//Check that all fields are filled
-    private boolean validateForm() {
+    /**
+     * Called when Sign Up Button is pressed. Should verify that
+     * all fields are filled out, if not, notifies user which
+     * field is empty and focuses on the input box
+     */
+
+    private boolean validateEntries() {
         boolean valid = true;
-        String email = tEmail.getText().toString().trim();
+
+       String email = tEmail.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             tEmail.setError("Email is required");
@@ -116,6 +152,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
         return valid;
     }
+
 
 
 }

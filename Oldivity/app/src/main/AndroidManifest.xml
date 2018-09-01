@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".profile" />
-        <activity android:name=".ViewListContents" />
         <activity android:name=".SignUpActivity"></activity>
     </application>
 

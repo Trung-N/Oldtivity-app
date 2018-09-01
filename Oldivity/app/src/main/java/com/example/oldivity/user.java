@@ -1,20 +1,30 @@
 package com.example.oldivity;
 
-
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-
-@Entity
 public class user {
 
-    @PrimaryKey
-    public String name;
+    public String firstName;
     public String lastName;
     public String email;
 
-    public user(String name, String lastName, String email) {
-        this.name = name;
+
+    public user(String firstName, String lastName, String email) {
+        this.firstName = firstName;
         this.lastName  = lastName;
         this.email = email;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName(){
+        return lastName;
+    }
+
+    public String getemail(){
+        return email;
+    }
+
+
+
 }
