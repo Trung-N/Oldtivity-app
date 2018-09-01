@@ -79,13 +79,4 @@
         android:text="Not a member yet?"
         android:textSize="20sp" />
 
-    <Button
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnView"
-        android:text="View Entrys"
-        android:onClick="ViewListContents"
-        android:layout_toLeftOf="@+id/buttonSignUp"/>
-
 </RelativeLayout>

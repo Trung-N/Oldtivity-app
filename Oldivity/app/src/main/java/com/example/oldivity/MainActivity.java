@@ -1,24 +1,28 @@
 package com.example.oldivity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "EmailPassword";
     private EditText etUserEmail;
     private EditText etPassword;
-    private String username;
-    private String password;
-    private String storedPassword;
-    Context context=this;
-    private LoginDatabaseAdapter loginDataBaseAdapter;
+    private FirebaseAuth mAuth;
+    private String password, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,58 +33,90 @@ public class MainActivity extends AppCompatActivity {
         etUserEmail = findViewById(R.id.Email);
         etPassword = findViewById(R.id.Password);
         // create the instance of Database
-        loginDataBaseAdapter=new LoginDatabaseAdapter(getApplicationContext());
+        mAuth = FirebaseAuth.getInstance();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        /**unfinished**/
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser user = mAuth.getCurrentUser();
+        //updateUI(currentUser);
+    }
+
+    //When login button is pressed
     public void SignIN(View view) {
-        try {
-            loginDataBaseAdapter = loginDataBaseAdapter.open();
-            username = etUserEmail.getText().toString();
-            password = etPassword.getText().toString();
-            if (username.equals("") || password.equals("")) {
-                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                alertDialog.setTitle("ALERT!");
-                alertDialog.setMessage("Fill All Fields");
-                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+        email = etUserEmail.getText().toString().trim();
+        password = etPassword.getText().toString().trim();
+
+        if (!validateEntries()) {
+            return;
+        }
+
+        //Check login details with authenticator
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            // Sign in success
+                            Log.d(TAG, "signInWithEmail:success");
+                            Toast.makeText(MainActivity.this,
+                                    "Login successful!", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            /** Move to profile page after successful login (temporary) **/
+                            startActivity(new Intent(MainActivity.this, profile.class));
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Login failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-                alertDialog.show();
-            }
-            // fetch the Password form database for respective user name
-            if (!username.equals("")) {
-                storedPassword = loginDataBaseAdapter.getSinlgeEntry(username);
-                // check if the Stored password matches with Password entered by user
-                if (password.equals(storedPassword)) {
-                    Intent intent1 = new Intent(MainActivity.this, profile.class);
-                    startActivity(intent1);
-                    // finish();
-                }
-                else
-                {
-                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                    alertDialog.setTitle("ALERT!");
-                    alertDialog.setMessage("Incorrect Username OR Password");
-                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    alertDialog.show();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.e("Error", "error login");
-        }
     }
+
+    //When Signup button is pressed, move to signup page
     public void SignUP(View view) {
-        Intent intent = new Intent(MainActivity.this, SignUp.class);
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
 
-    public void ViewListContents(View view) {
-        Intent intent2 = new Intent(MainActivity.this, ViewListContents.class);
-        startActivity(intent2);
-    }
 
+    /**
+     * Called when Login Button is pressed. Should verify that
+     * all fields are filled out, if not, notifies user which
+     * field is empty and focuses on the input box
+     */
+
+    private boolean validateEntries() {
+        boolean valid = true;
+
+        String email = etUserEmail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            etUserEmail.setError("Email is required");
+            etUserEmail.requestFocus();
+            valid = false;
+
+        } else {
+            etUserEmail.setError(null);
+        }
+
+        String password = etPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(password)) {
+            etPassword.setError("Password is required");
+            etPassword.requestFocus();
+            valid = false;
+        } else {
+            etPassword.setError(null);
+        }
+        return valid;
+    }
 }

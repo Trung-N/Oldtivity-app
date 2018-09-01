@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1070563578172",
+    "firebase_url": "https://oldivity-cbf15.firebaseio.com",
+    "project_id": "oldivity-cbf15",
+    "storage_bucket": "oldivity-cbf15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070563578172:android:726179d05126b979",
+        "android_client_info": {
+          "package_name": "com.example.oldivity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070563578172-sojqckv3hlbcmnl5qsshq9ht3b2s1tbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAY2cYIacTqaLdHE-N3tVn-1D1kBm7GC0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
