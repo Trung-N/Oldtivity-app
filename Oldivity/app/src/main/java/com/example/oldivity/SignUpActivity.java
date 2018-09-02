@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String uID;
 
-    private DatabaseReference Users;
+    private DatabaseReference Database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Get database & Firebase auth instance
         mAuth = FirebaseAuth.getInstance();
-        Users = FirebaseDatabase.getInstance().getReference("users");
+        Database = FirebaseDatabase.getInstance().getReference("users");
 
         //User Inputs
         tFirstName = findViewById(R.id.tFirstName);
@@ -79,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             uID = user.getUid();
                             user newUser = new user(firstName, lastName, email);
-                            Users.child(uID).setValue(newUser);
+                            Database.child(uID).setValue(newUser);
 
                             // Inform successful sign-up
                             Log.d(TAG, "createUserWithEmail:success");
