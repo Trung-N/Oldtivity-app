@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
+
     //When login button is pressed
     public void SignIN(View view) {
         email = etUserEmail.getText().toString().trim();
@@ -119,4 +120,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return valid;
     }
+
+
+
 }
