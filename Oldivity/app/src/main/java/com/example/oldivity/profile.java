@@ -64,15 +64,18 @@ public class profile extends AppCompatActivity {
     }
 
     public void myEvents(View view) {
-
+        Intent intent = new Intent(profile.this, MyEvents.class);
+        startActivity(intent);
     }
 
     public void friendsList(View view) {
-
+        Intent intent = new Intent(profile.this, FriendsList.class);
+        startActivity(intent);
     }
 
     public void exploreEvents(View view) {
-
+        Intent intent = new Intent(profile.this, ExploreEvents.class);
+        startActivity(intent);
     }
 
 }
