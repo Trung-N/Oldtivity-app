@@ -33,7 +33,7 @@
         android:textSize="25sp" />
 
     <Button
-        android:id="@+id/buttonfriendslist"
+        android:id="@+id/friendsList"
         android:layout_width="383dp"
         android:layout_height="105dp"
         android:layout_alignParentTop="true"
@@ -50,7 +50,7 @@
         tools:layout_editor_absoluteY="482dp" />
 
     <Button
-        android:id="@+id/buttonexploreevents"
+        android:id="@+id/exploreEvents"
         android:layout_width="383dp"
         android:layout_height="105dp"
         android:layout_alignParentBottom="true"
@@ -67,7 +67,7 @@
         tools:layout_editor_absoluteY="359dp" />
 
     <Button
-        android:id="@+id/buttonmyevents"
+        android:id="@+id/myEvents"
         android:layout_width="383dp"
         android:layout_height="105dp"
         android:layout_alignParentBottom="true"
