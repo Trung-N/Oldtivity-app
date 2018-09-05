@@ -38,7 +38,7 @@
         android:layout_height="105dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="219dp"
+        android:layout_marginTop="192dp"
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
         android:onClick="friendsList"
