@@ -47,7 +47,7 @@ public class CreateEvent extends AppCompatActivity {
 
         //get database and firebase instance
         evAuth = FirebaseAuth.getInstance();
-        Database = FirebaseDatabase.getInstance().getReference("users");
+        Database = FirebaseDatabase.getInstance().getReference();
     }
 
     //copy and pasted from MainActivity
@@ -71,35 +71,24 @@ public class CreateEvent extends AppCompatActivity {
             return;
         }
 
-
         FirebaseUser user = evAuth.getCurrentUser();
 
-        /*Should push the new event to the branch /events/uId in the
-         *database. setValue was not used so multiple events can be stored
-         *by a single user at a time
-        */
+        //Should push the new event to the branch /events/ in the database.
+
         uId = user.getUid();
         Event event = new Event(title, loc, desc, date, uId);
-        String key = Database.child("events").push().getKey();
+        Database.child("events").push().setValue(event);
 
-        if(Database.child(key).setValue(event).isSuccessful()){
-            // If sign up fails, display a message to the user.
-            Log.w(TAG, "createEvent:success");
-            Toast.makeText(CreateEvent.this, "Event successfully created!",
-                    Toast.LENGTH_SHORT).show();
+        /**add in thing that checks if added to database**/
+        Log.w(TAG, "createEvent:success");
+        Toast.makeText(CreateEvent.this, "Event successfully created!",
+                Toast.LENGTH_SHORT).show();
 
-            //Move to main page to sign in
-            startActivity(new Intent(CreateEvent.this,MainActivity.class));
-        }else{
-            // If sign up fails, display a message to the user.
-            Log.w(TAG, "createEvent:failure");
-            Toast.makeText(CreateEvent.this, "Failed to create event",
-                    Toast.LENGTH_SHORT).show();
-        }
-
+        //Move to main page to sign in**/
+        startActivity(new Intent(CreateEvent.this,MainActivity.class));
     }
 
-    //copied and modified for variable names from MainActivity.java
+    /**copied and modified for variable names from MainActivity.java
     /*makes sure all fields are filled out. If not, the user is notified
      *which required field is missing.
      */

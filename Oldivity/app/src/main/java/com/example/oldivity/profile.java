@@ -32,6 +32,7 @@ public class profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         editText = findViewById(R.id.displayName);
         getUserProfile();
+
     }
 
     public void getUserProfile() {
@@ -44,10 +45,12 @@ public class profile extends AppCompatActivity {
             uID = user.getUid();
             currentUser = Database.child("users").child(uID).child("firstName");
 
+            //Display user's name to UI
             currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Name = dataSnapshot.getValue(String.class);
+                    editText.setText(Name);
 
                 }
 
@@ -55,10 +58,8 @@ public class profile extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     throw databaseError.toException();
                 }
-            });
 
-            //Display user's name to UI
-            editText.setText(Name);
+            });
 
         }
     }
