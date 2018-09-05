@@ -71,47 +71,32 @@ public class CreateEvent extends AppCompatActivity {
             return;
         }
 
-        evAuth.createUserWithEmailAndPassword(title, desc)
-                .addOnCompleteListener(CreateEvent.this,
-                    new OnCompleteListener<AuthResult>() {
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser user = evAuth.getCurrentUser();
+        FirebaseUser user = evAuth.getCurrentUser();
 
-                                /*Should push the new event to the branch /events/uId in the
-                                 *database. setValue was not used so multiple events can be stored
-                                 *by a single user at a time
-                                 */
-                                uId = user.getUid();
-                                Event event = new Event(title, loc, desc, date, uId);
-                                String key = Database.child("posts").push().getKey();
-                                Map<String, Object> eventValues = event.toMap();
+        /*Should push the new event to the branch /events/uId in the
+         *database. setValue was not used so multiple events can be stored
+         *by a single user at a time
+        */
+        uId = user.getUid();
+        Event event = new Event(title, loc, desc, date, uId);
+        String key = Database.child("events").push().getKey();
 
-                                Map<String, Object> eventUpdates = new HashMap<>();
-                                eventUpdates.put("/events/" + key, eventValues);
-                                Database.updateChildren(eventUpdates);
+        if(Database.child(key).setValue(event).isSuccessful()){
+            // If sign up fails, display a message to the user.
+            Log.w(TAG, "createEvent:success");
+            Toast.makeText(CreateEvent.this, "Event successfully created!",
+                    Toast.LENGTH_SHORT).show();
 
-                                // Inform successful sign-up
-                                Log.d(TAG, "createEvent:success");
-                                Toast.makeText(CreateEvent.this,
-                                        "Event successfully created!",
-                                        Toast.LENGTH_SHORT).show();
+            //Move to main page to sign in
+            startActivity(new Intent(CreateEvent.this,MainActivity.class));
+        }else{
+            // If sign up fails, display a message to the user.
+            Log.w(TAG, "createEvent:failure");
+            Toast.makeText(CreateEvent.this, "Failed to create event",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-                                //Move to main page to sign in
-                                startActivity(new Intent(CreateEvent.this,
-                                        MainActivity.class));
-
-                            }else{
-                                // If sign up fails, display a message to the user.
-                                Log.w(TAG, "createEvent:failure", task.getException());
-                                Toast.makeText(CreateEvent.this,
-                                        "Failed to create Event.", Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    });
     }
 
     //copied and modified for variable names from MainActivity.java

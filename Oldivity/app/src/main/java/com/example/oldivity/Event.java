@@ -19,16 +19,6 @@ public class Event {
         this.host = host;
     }
 
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("title", title);
-        result.put("description", description);
-        result.put("date", date);
-        result.put("location", location);
-        result.put("host", host);
-        return result;
-    }
-
     public String getTitle() {
         return title;
     }
