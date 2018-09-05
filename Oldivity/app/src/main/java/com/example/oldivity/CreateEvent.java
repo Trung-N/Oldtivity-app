@@ -85,11 +85,12 @@ public class CreateEvent extends AppCompatActivity {
                                  *by a single user at a time
                                  */
                                 uId = user.getUid();
-                                Event event = new Event(title, loc, desc, date);
+                                Event event = new Event(title, loc, desc, date, uId);
+                                String key = Database.child("posts").push().getKey();
                                 Map<String, Object> eventValues = event.toMap();
 
                                 Map<String, Object> eventUpdates = new HashMap<>();
-                                eventUpdates.put("/events/" + uId, eventValues);
+                                eventUpdates.put("/events/" + key, eventValues);
                                 Database.updateChildren(eventUpdates);
 
                                 // Inform successful sign-up

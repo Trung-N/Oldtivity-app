@@ -9,12 +9,14 @@ public class Event {
     public String location;
     public String description;
     public String date;
+    public String host;
 
-    public Event(String title, String location, String description, String date) {
+    public Event(String title, String location, String description, String date, String host) {
         this.title = title;
         this.location = location;
         this.description = description;
         this.date = date;
+        this.host = host;
     }
 
     public Map<String, Object> toMap() {
@@ -23,7 +25,7 @@ public class Event {
         result.put("description", description);
         result.put("date", date);
         result.put("location", location);
-
+        result.put("host", host);
         return result;
     }
 
@@ -42,5 +44,7 @@ public class Event {
     public String getDate(){
         return date;
     }
+
+    public String getHost() { return host;}
 }
 
