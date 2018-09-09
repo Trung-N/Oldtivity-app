@@ -78,5 +78,9 @@ public class profile extends AppCompatActivity {
         Intent intent = new Intent(profile.this, ExploreEvents.class);
         startActivity(intent);
     }
+    public void Call(View view) {
+        Intent intent = new Intent(profile.this, call.class);
+        startActivity(intent);
+    }
 
 }

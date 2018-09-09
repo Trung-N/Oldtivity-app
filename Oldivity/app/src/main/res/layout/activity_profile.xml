@@ -33,12 +33,28 @@
         android:textSize="25sp" />
 
     <Button
-        android:id="@+id/friendsList"
+        android:id="@+id/Call"
         android:layout_width="383dp"
         android:layout_height="105dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/displayName"
+        android:background="#0AA2CB"
+        android:lineSpacingExtra="20sp"
+        android:onClick="Call"
+        android:text="Call"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="14dp"
+        tools:layout_editor_absoluteY="482dp" />
+
+    <Button
+        android:id="@+id/friendsList2"
+        android:layout_width="383dp"
+        android:layout_height="105dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="192dp"
+        android:layout_marginBottom="254dp"
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
         android:onClick="friendsList"
