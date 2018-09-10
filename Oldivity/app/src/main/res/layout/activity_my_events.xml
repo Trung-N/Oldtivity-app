@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyEvents">
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scrollView2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,10 +32,10 @@
                 android:layout_marginTop="15dp"
                 android:background="#0AA2CB"
                 android:lineSpacingExtra="20sp"
+                android:onClick="createEvent"
                 android:text="Create Event"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp"
-                android:onClick="createEvent"
                 android:visibility="visible" />
 
         </LinearLayout>

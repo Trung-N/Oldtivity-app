@@ -2,14 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.oldivity">
 
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
 
     <application
         android:allowBackup="true"
@@ -34,7 +32,10 @@
         <activity android:name=".FriendsList" />
         <activity android:name=".ExploreEvents" />
         <activity android:name=".CreateEvent" />
-        <activity android:name=".JoinEvent"></activity>
+        <activity android:name=".GroupChatActivity" />
+        <activity android:name=".JoinEvent" />
+        <activity android:name=".MainChatActivity"
+            ></activity>
     </application>
 
 </manifest>
