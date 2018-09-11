@@ -19,6 +19,8 @@
 const functions = require('firebase-functions');
 // [END functionsimport]
 // [START additionalimports]
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 // Moments library to format dates.
 const moment = require('moment');
 // CORS Express middleware to enable CORS Requests.
@@ -76,3 +78,12 @@ exports.date = functions.https.onRequest((req, res) => {
   });
 });
 // [END all]
+
+exports.nearevents = functions.https.onRequest((req, res) => {
+    var db = admin.database();
+    var ref = db.ref().child('events');
+
+    ref.on("value", function(snapshot){
+        res.send(snapshot.val());
+    });
+});
