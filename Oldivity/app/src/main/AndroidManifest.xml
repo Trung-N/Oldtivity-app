@@ -8,10 +8,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<<<<<<< HEAD
 
-=======
->>>>>>> UI
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -35,15 +32,11 @@
         <activity android:name=".FriendsList" />
         <activity android:name=".ExploreEvents" />
         <activity android:name=".CreateEvent" />
-<<<<<<< HEAD
         <activity android:name=".GroupChatActivity" />
         <activity android:name=".JoinEvent" />
         <activity android:name=".MainChatActivity"
             ></activity>
-=======
-        <activity android:name=".JoinEvent" />
         <activity android:name=".call"></activity>
->>>>>>> UI
     </application>
 
 </manifest>
