@@ -12,38 +12,21 @@ module.exports.login = function(req,res){
     var ref = db.ref().child('events');
     var events = [];
     ref.on("value", function(snapshot){
-        events = eventToArray(snapshot);
-        events = eventDateFilter(events);
+        events = Object.entries(snapshot.val());
+        eventDateFilter(events);
         res.send(events);
     });
 
 };
 
-function eventToArray(snapshot) {
-    var events = [];
 
-    snapshot.forEach(function(childSnapshot) {
-        var event = [];
-        event.push(childSnapshot.key);
-        var eventDetail = [];
-        eventDetail.push(childSnapshot.child('date').val());
-        eventDetail.push(childSnapshot.child('description').val());
-        eventDetail.push(childSnapshot.child('location').val());
-        eventDetail.push(childSnapshot.child('title').val());
-        event.push(eventDetail);
-        events.push(event);
-    });
-
-    return events;
-};
 
 function eventDateFilter(events){
     var currentDate = new Date();
-    console.log(currentDate);
-
     var eventSize = events.length;
     for (var i = eventSize-1; i >= 0; i--){
-        eventDate = events[i][1][0].split('/');
+        event = Object.entries(events[i][1]);
+        eventDate = event[0][1].split('/');
         eventDate[1]--;
         eventDate[0]++;
         eventDate = new Date(eventDate[2], eventDate[1], (eventDate[0]));
