@@ -11,7 +11,8 @@ var geocoder = NodeGeocoder({
     apiKey: '761238e07064497cb24af3499d16709b'
 });
 
-module.exports.login = function(req,res){
+
+module.exports.eventsearch = function(req,res){
     var db = admin.database();
     var ref = db.ref().child('events');
     var events = [];
@@ -19,7 +20,9 @@ module.exports.login = function(req,res){
         events = Object.entries(snapshot.val());
         eventDateFilter(events);
         eventGeocodes = eventGeocode(events,function(geocodes){
-            console.log(geocodes);
+            var lat = req.body.latitude;
+            var lng = req.body.longitude;
+            events = distanceSort(events, geocodes, lat, lng);
             res.send(arrayToJson(events));
         });
     });
@@ -66,6 +69,30 @@ function eventGeocode(events, callback){
         }
         callback(geocodes) ;
     });
+}
 
+function distanceSort(events, geocodes, lat, lng){
+    for (var i = 0; i< events.length; i++){
+        events[i][1]['distance'] = distance(lat, lng, geocodes[i][0], geocodes[i][1]);
+        function Comparator(a, b) {
+            if (a[1]['distance'] < b[1]['distance']) return -1;
+            if (a[1]['distance'] > b[1]['distance']) return 1;
+            return 0;
+        }
+        events = events.sort(Comparator);
+    }
+    return events;
+}
 
+//function from https://snipplr.com/view/25479/calculate-distance-between-two-points-with-latitude-and-longitude-coordinates/
+function distance(lat1,lon1,lat2,lon2) {
+    var R = 6371;
+    var dLat = (lat2-lat1) * Math.PI / 180;
+    var dLon = (lon2-lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return Math.round(d*100)/100;
 }
