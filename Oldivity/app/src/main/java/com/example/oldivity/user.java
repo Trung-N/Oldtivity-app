@@ -5,12 +5,14 @@ public class user {
     public String firstName;
     public String lastName;
     public String email;
+    public String number;
 
 
-    public user(String firstName, String lastName, String email) {
+    public user(String firstName, String lastName, String email, String number) {
         this.firstName = firstName;
         this.lastName  = lastName;
         this.email = email;
+        this.number = number;
     }
 
     public String getFirstName() {
@@ -24,6 +26,8 @@ public class user {
     public String getemail(){
         return email;
     }
+
+    public String getNumber() {return number;}
 
 
 

@@ -10,13 +10,15 @@ public class Event {
     public String description;
     public String date;
     public String host;
+    public String phoneNumber;
 
-    public Event(String title, String location, String description, String date, String host) {
+    public Event(String title, String location, String description, String date, String host, String phoneNumber) {
         this.title = title;
         this.location = location;
         this.description = description;
         this.date = date;
         this.host = host;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getTitle() {
@@ -36,5 +38,7 @@ public class Event {
     }
 
     public String getHost() { return host;}
+
+    public String getPhoneNumber() { return phoneNumber; }
 }
 

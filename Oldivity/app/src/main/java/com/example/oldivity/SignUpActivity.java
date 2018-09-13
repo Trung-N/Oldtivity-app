@@ -24,8 +24,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
 
-    private EditText tFirstName, tLastName, tEmail, tPassword;
-    private String firstName, lastName, email, password;
+    private EditText tFirstName, tLastName, tEmail, tPassword, tNumber;
+    private String firstName, lastName, email, password, number;
     private FirebaseAuth mAuth;
     private String uID;
 
@@ -45,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         tLastName = findViewById(R.id.tLastName);
         tEmail = findViewById(R.id.tEmail);
         tPassword = findViewById(R.id.tPassword);
+        tNumber = findViewById(R.id.tNumber);
 
     }
 
@@ -67,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
         lastName = tLastName.getText().toString().trim();
         email = tEmail.getText().toString().trim();
         password = tPassword.getText().toString().trim();
+        number = tNumber.getText().toString().trim();
 
         //Create user authenticator & entry in user database
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -80,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
                             //Add user information to database with same unique ID as authenticator
                             FirebaseUser user = mAuth.getCurrentUser();
                             uID = user.getUid();
-                            user newUser = new user(firstName, lastName, email);
+                            user newUser = new user(firstName, lastName, email, number);
                             Database.child(uID).setValue(newUser);
 
                             // Inform successful sign-up
@@ -152,6 +154,16 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             tLastName.setError(null);
         }
+
+        String number = tNumber.getText().toString().trim();
+        if (TextUtils.isEmpty(number)) {
+            tNumber.setError("Phone Number is required");
+            tNumber.requestFocus();
+            valid = false;
+        } else {
+            tNumber.setError(null);
+        }
+
         return valid;
     }
 

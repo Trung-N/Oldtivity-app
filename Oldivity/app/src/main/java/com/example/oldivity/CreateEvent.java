@@ -33,7 +33,7 @@ public class CreateEvent extends AppCompatActivity {
 
     private FirebaseAuth evAuth;
     private DatabaseReference Database;
-    String uId;
+    String uId, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +76,11 @@ public class CreateEvent extends AppCompatActivity {
         //Should push the new event to the branch /events/ in the database.
 
         uId = user.getUid();
-        Event event = new Event(title, loc, desc, date, uId);
-        Database.child("events").push().setValue(event);
+        /**need to add in retrieval of host phone number**/
 
-        /**add in thing that checks if added to database**/
+
+        Event event = new Event(title, loc, desc, date, uId, phone);
+        Database.child("events").push().setValue(event);
         Log.w(TAG, "createEvent:success");
         Toast.makeText(CreateEvent.this, "Event successfully created!",
                 Toast.LENGTH_SHORT).show();
