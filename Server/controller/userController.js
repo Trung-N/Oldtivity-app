@@ -12,21 +12,27 @@ module.exports.login = function(req,res){
     var ref = db.ref().child('events');
     var events = [];
     ref.on("value", function(snapshot){
-        events = snapshotToArray(snapshot);
+        events = eventToArray(snapshot);
         res.send(events);
     });
 
 };
 
-function snapshotToArray(snapshot) {
-    var returnArr = [];
+function eventToArray(snapshot) {
+    var events = [];
 
     snapshot.forEach(function(childSnapshot) {
-        var item = childSnapshot.val();
-        item.key = childSnapshot.key;
+        var event = [];
+        event.push(childSnapshot.key);
+        var eventDetail = [];
+        eventDetail.push(childSnapshot.child('date'));
+        eventDetail.push(childSnapshot.child('description'));
+        eventDetail.push(childSnapshot.child('location'));
+        eventDetail.push(childSnapshot.child('title'));
+        event.push(eventDetail);
 
-        returnArr.push(item);
+        events.push(event);
     });
 
-    return returnArr;
+    return events;
 };
