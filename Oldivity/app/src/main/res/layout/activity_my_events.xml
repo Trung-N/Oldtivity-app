@@ -21,6 +21,17 @@
             android:paddingRight="24dp"
             android:paddingTop="20dp">
 
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Events I have joined"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="141dp" />
 
             <!-- create event Button -->
             <Button
@@ -36,27 +47,17 @@
                 android:textSize="30sp"
                 android:visibility="visible" />
 
+            <ListView
+                android:layout_width="300dp"
+                android:layout_height="442dp"
+                app:layout_constraintEnd_toStartOf="@+id/scrollView2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="188dp" />
 
 
-    <ListView
-        android:layout_width="300dp"
-        android:layout_height="442dp"
-        app:layout_constraintEnd_toStartOf="@+id/scrollView2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="188dp" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Events I have joined"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="141dp" />
+        </LinearLayout>
+    </ScrollView>
 
         </LinearLayout>
     </ScrollView>
