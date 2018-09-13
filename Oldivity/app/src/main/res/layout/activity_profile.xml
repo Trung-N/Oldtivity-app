@@ -18,9 +18,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="Welcome"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"/>
+        android:text="Welcome!"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="75sp"/>
 
     <TextView
         android:id="@+id/displayName"
@@ -57,8 +57,8 @@
         android:layout_marginBottom="254dp"
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
-        android:onClick="friendsList"
-        android:text="Friend's List"
+        android:onClick="goToChats"
+        android:text="WANNA CHAT"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:visibility="visible"

@@ -18,4 +18,9 @@ public class MyEvents extends AppCompatActivity {
         Intent intent = new Intent(MyEvents.this, CreateEvent.class);
         startActivity(intent);
     }
+    public void groupChat(View view) {
+        Intent intent = new Intent(MyEvents.this, GroupChatActivity.class);
+        startActivity(intent);
+    }
+
 }
