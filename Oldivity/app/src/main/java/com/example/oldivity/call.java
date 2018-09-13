@@ -15,11 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-
 public class call extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -27,8 +22,6 @@ public class call extends AppCompatActivity {
 
     private TelephonyManager mTelephonyManager;
     private MyPhoneCallListener mListener;
-    private DatabaseReference Database;
-    private FirebaseAuth evAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +45,6 @@ public class call extends AppCompatActivity {
             // Disable the call button.
             disableCallButton();
         }
-        //get database and firebase instance
-        evAuth = FirebaseAuth.getInstance();
-        Database = FirebaseDatabase.getInstance().getReference();
     }
 
     /**
@@ -210,6 +200,7 @@ public class call extends AppCompatActivity {
         Toast.makeText(this, R.string.phone_disabled, Toast.LENGTH_LONG).show();
         ImageButton callButton = (ImageButton) findViewById(R.id.phone_icon);
         callButton.setVisibility(View.INVISIBLE);
+
     }
 
     /**
