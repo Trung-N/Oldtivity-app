@@ -1,222 +1,113 @@
 package com.example.oldivity;
 
-import android.content.Intent;
+import android.Manifest;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.media.AudioManager;
 import android.os.Bundle;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.Sinch;
+import com.sinch.android.rtc.SinchClient;
+import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallClient;
+import com.sinch.android.rtc.calling.CallClientListener;
+import com.sinch.android.rtc.calling.CallListener;
+
+import java.util.List;
 
 public class call extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
+    private static final String PHONE_NO = "+61431214410";
+    private static final String APP_KEY = "4baa9405-610f-4a05-9544-93f6ffc51079";
+    private static final String APP_SECRET = "Vqbd0fS35UO4RBOjPeYrcw==";
+    private static final String ENVIRONMENT = "clientapi.sinch.com";
 
-    private TelephonyManager mTelephonyManager;
-    private MyPhoneCallListener mListener;
+    private Call call;
+    private TextView callState;
+    private Button button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        // Create a telephony manager.
-        mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        // Check to see if Telephony is enabled.
-        if (isTelephonyEnabled()) {
-            Log.d(TAG, getString(R.string.telephony_enabled));
-            // Check for phone permission.
-            checkForPhonePermission();
-            // Register the PhoneStateListener to monitor phone activity.
-            mListener = new MyPhoneCallListener();
-            mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_CALL_STATE);
-        } else {
-            Toast.makeText(this,
-                    R.string.telephony_not_enabled, Toast.LENGTH_LONG).show();
-            Log.d(TAG, getString(R.string.telephony_not_enabled));
-            // Disable the call button.
-            disableCallButton();
+        if (ContextCompat.checkSelfPermission(call.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(call.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(call.this,
+                    new String[]{android.Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE},
+                    1);
         }
-    }
 
-    /**
-     * Checks whether Telephony is enabled.
-     *
-     * @return true if enabled, otherwise false
-     */
-    private boolean isTelephonyEnabled() {
-        if (mTelephonyManager != null) {
-            if (mTelephonyManager.getSimState() == TelephonyManager.SIM_STATE_READY) {
-                return true;
-            }
-        }
-        return false;
-    }
+        final SinchClient sinchClient = Sinch.getSinchClientBuilder()
+                .context(this)
+                .userId("current-user-id")
+                .applicationKey(APP_KEY)
+                .applicationSecret(APP_SECRET)
+                .environmentHost(ENVIRONMENT)
+                .build();
 
-    /**
-     * Checks whether the app has phone-calling permission.
-     */
-    private void checkForPhonePermission() {
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, getString(R.string.permission_not_granted));
-            // Permission not yet granted. Use requestPermissions().
-            // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.CALL_PHONE},
-                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
-        } else {
-            // Permission already granted. Enable the call button.
-            enableCallButton();
-        }
-    }
+        sinchClient.setSupportCalling(true);
+        sinchClient.startListeningOnActiveConnection();
+        sinchClient.start();
 
-    /**
-     * Processes permission request codes.
-     *
-     * @param requestCode  The request code passed in requestPermissions()
-     * @param permissions  The requested permissions. Never null.
-     * @param grantResults The grant results for the corresponding permissions
-     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        // Check if permission is granted or not for the request.
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
-                if (permissions[0].equalsIgnoreCase(android.Manifest.permission.CALL_PHONE)
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted. Enable call button.
-                    enableCallButton();
-                } else {
-                    // Permission denied.
-                    Log.d(TAG, getString(R.string.failure_permission));
-                    Toast.makeText(this, getString(R.string.failure_permission),
-                            Toast.LENGTH_LONG).show();
-                    // Disable the call button.
-                    disableCallButton();
+
+        button = findViewById(R.id.button);
+        callState = findViewById(R.id.callState);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (call == null) {
+                    call = sinchClient.getCallClient().callPhoneNumber(PHONE_NO);
+                    call.addCallListener(new SinchCallListener());
+                    button.setText("Hang Up");
+                }else {
+                    call.hangup();
                 }
+
             }
-        }
+        });
     }
 
-    /**
-     * Uses an implicit intent to make the phone call.
-     * Before calling, checks to see if permission is granted.
-     *
-     * @param view View (phone_icon) that was clicked.
-     */
-    public void callNumber(View view) {
-        EditText editText = (EditText) findViewById(R.id.editText_main);
-        // Use format with "tel:" and phone number to create phoneNumber.
-        String phoneNumber = String.format("tel: %s", editText.getText().toString());
-        // Log the concatenated phone number for dialing.
-        Log.d(TAG, getString(R.string.dial_number) + phoneNumber);
-        Toast.makeText(this, getString(R.string.dial_number) + phoneNumber,
-                Toast.LENGTH_LONG).show();
-        // Create the intent.
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        // Set the data for the intent as the phone number.
-        callIntent.setData(Uri.parse(phoneNumber));
-        // If package resolves to an app, check for phone permission,
-        // and send intent.
-        if (callIntent.resolveActivity(getPackageManager()) != null) {
-            checkForPhonePermission();
-            startActivity(callIntent);
-        } else {
-            Log.e(TAG, "Can't resolve app for ACTION_CALL Intent.");
+    private class SinchCallListener implements CallListener {
+        @Override
+        public void onCallEnded(Call endedCall) {
+            call = null;
+            button.setText("Call");
+            callState.setText("");
+            setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
         }
-    }
-
-    /**
-     * Monitors and logs phone call activities, and shows the phone state
-     * in a toast message.
-     */
-    private class MyPhoneCallListener extends PhoneStateListener {
-        private boolean returningFromOffHook = false;
 
         @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            String message = getString(R.string.phone_status);
-            switch (state) {
-                case TelephonyManager.CALL_STATE_RINGING:
-                    // Incoming call is ringing (not used for outgoing call).
-                    message = message +
-                            getString(R.string.ringing) + incomingNumber;
-                    Toast.makeText(call.this, message, Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, message);
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    // Phone call is active -- off the hook.
-                    message = message + getString(R.string.offhook);
-                    Toast.makeText(call.this, message, Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, message);
-                    returningFromOffHook = true;
-                    break;
-                case TelephonyManager.CALL_STATE_IDLE:
-                    // Phone is idle before and after phone call.
-                    // If running on version older than 19 (KitKat),
-                    // restart activity when phone call ends.
-                    message = message + getString(R.string.idle);
-                    Toast.makeText(call.this, message, Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, message);
-                    if (returningFromOffHook) {
-                        // No need to do anything if >= version KitKat.
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                            Log.i(TAG, getString(R.string.restarting_app));
-                            // Restart the app.
-                            Intent intent = getPackageManager()
-                                    .getLaunchIntentForPackage(getPackageName());
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                        }
-                    }
-                    break;
-                default:
-                    message = message + "Phone off";
-                    Toast.makeText(call.this, message, Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, message);
-                    break;
-            }
+        public void onCallEstablished(Call establishedCall) {
+            callState.setText("connected");
+            setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+        }
+
+        @Override
+        public void onCallProgressing(Call progressingCall) {
+            callState.setText("ringing");
+        }
+
+        @Override
+        public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
         }
     }
 
-    /**
-     * Makes the call button (phone_icon) invisible so that it can't be used,
-     * and makes the Retry button visible.
-     */
-    private void disableCallButton() {
-        Toast.makeText(this, R.string.phone_disabled, Toast.LENGTH_LONG).show();
-        ImageButton callButton = (ImageButton) findViewById(R.id.phone_icon);
-        callButton.setVisibility(View.INVISIBLE);
-
-    }
-
-    /**
-     * Makes the call button (phone_icon) visible so that it can be used.
-     */
-    private void enableCallButton() {
-        ImageButton callButton = (ImageButton) findViewById(R.id.phone_icon);
-        callButton.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isTelephonyEnabled()) {
-            mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_NONE);
+    private class SinchCallClientListener implements CallClientListener {
+        @Override
+        public void onIncomingCall(CallClient callClient, Call incomingCall) {
+            call = incomingCall;
+            Toast.makeText(call.this, "incoming call", Toast.LENGTH_SHORT).show();
+            call.answer();
+            call.addCallListener(new SinchCallListener());
+            button.setText("Hang Up");
         }
     }
 }
