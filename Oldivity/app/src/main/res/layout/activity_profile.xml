@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="3dp"
         android:text="Welcome!"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="75sp"/>
@@ -28,16 +28,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="93dp"
+        android:layout_marginTop="105dp"
         android:textColor="@android:color/black"
-        android:textSize="25sp" />
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/Call"
         android:layout_width="383dp"
         android:layout_height="105dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/displayName"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="163dp"
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
         android:onClick="Call"
@@ -54,7 +55,7 @@
         android:layout_height="105dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="254dp"
+        android:layout_marginBottom="240dp"
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
         android:onClick="goToChats"
