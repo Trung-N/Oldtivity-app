@@ -81,6 +81,7 @@ public class profile extends AppCompatActivity {
 
     public void goToChats(View view) {
         Intent intent = new Intent(profile.this, MainChatActivity.class);
+        startActivity(intent);
     }
 
     public void Call(View view) {
