@@ -17,6 +17,7 @@ import java.util.Random;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
     private List<Event> events;
+    //add or remove colours from here at will
     private String[] colours = {"#a8c0fc", "#fffdaf","#FFE5CE","#E4BD9C","#E94D3C","#E8925F","#92BFC1","#E57A80","#EFE0A3"};
 
     //copied from online to be changed later
