@@ -59,7 +59,4 @@
         </LinearLayout>
     </ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
-
 </android.support.constraint.ConstraintLayout>

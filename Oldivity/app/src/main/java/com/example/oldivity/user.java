@@ -23,12 +23,11 @@ public class user {
         return lastName;
     }
 
-    public String getemail(){
+    public String getEmail(){
         return email;
     }
 
     public String getNumber() {return number;}
-
 
 
 }
