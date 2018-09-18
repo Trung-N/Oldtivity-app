@@ -16,8 +16,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -28,12 +31,11 @@ public class CreateEvent extends AppCompatActivity {
     private static final String TAG = "EventCreation";
 
     private EditText evTitle, evLocation, evDescription;
-    private String title, loc, desc, date;
+    private String title, loc, desc, date, phone;
     private CalendarView evCal;
-
     private FirebaseAuth evAuth;
-    private DatabaseReference Database;
-    String uId, phone;
+    private DatabaseReference Database, userDatabase;
+    public String uId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,14 @@ public class CreateEvent extends AppCompatActivity {
         evDescription = findViewById(R.id.eventDescription);
         evCal = findViewById(R.id.eventDate);
 
-        //get database and firebase instance
+        //gets database and firebase authenticator instances and uid and phone number of user
         evAuth = FirebaseAuth.getInstance();
         Database = FirebaseDatabase.getInstance().getReference();
+        userDatabase = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseUser User = evAuth.getCurrentUser();
+        uId = User.getUid();
+        getUserInfo();
+
     }
 
     //copy and pasted from MainActivity
@@ -56,7 +63,7 @@ public class CreateEvent extends AppCompatActivity {
         super.onStart();
         /**unfinished**/
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser user = evAuth.getCurrentUser();
+        FirebaseUser User = evAuth.getCurrentUser();
         //updateUI(currentUser);
     }
 
@@ -71,23 +78,20 @@ public class CreateEvent extends AppCompatActivity {
             return;
         }
 
-        FirebaseUser user = evAuth.getCurrentUser();
 
-        //Should push the new event to the branch /events/ in the database.
-
-        uId = user.getUid();
-        /**need to add in retrieval of host phone number**/
-
+        //Push the new event to the branch /events/ in the database.
 
         Event event = new Event(title, loc, desc, date, uId, phone);
+
         Database.child("events").push().setValue(event);
         Log.w(TAG, "createEvent:success");
         Toast.makeText(CreateEvent.this, "Event successfully created!",
                 Toast.LENGTH_SHORT).show();
 
-        //Move to main page to sign in**/
-        startActivity(new Intent(CreateEvent.this,MainActivity.class));
+        //Moves to 'My Events' page after event successfully created
+        startActivity(new Intent(CreateEvent.this, MyEvents.class));
     }
+
 
     /**copied and modified for variable names from MainActivity.java
     /*makes sure all fields are filled out. If not, the user is notified
@@ -137,6 +141,24 @@ public class CreateEvent extends AppCompatActivity {
         }
         return valid;
     }
+
+    //Gets user/event creator's phone number to attach to event
+    public void getUserInfo(){
+        userDatabase.child(uId).child("number").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                phone = dataSnapshot.getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     //helper function to get string from date
     public String getDate(CalendarView cal){
