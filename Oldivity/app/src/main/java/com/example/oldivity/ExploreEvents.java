@@ -38,7 +38,6 @@ public class ExploreEvents extends AppCompatActivity {
         allEvents = new ArrayList<>();
         evAuth = FirebaseAuth.getInstance();
         Database = FirebaseDatabase.getInstance().getReference();
-        //mD
 
         recyclerView = findViewById(R.id.EventsList);
         ArrayList<Event> testEvents = testArray();
