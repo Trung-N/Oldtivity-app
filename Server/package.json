@@ -1,0 +1,16 @@
+{
+  "name": "Oldtivity",
+  "version": "1.0.0",
+  "description": "project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "firebase-admin": "^6.0.0",
+    "morgan": "^1.9.0",
+    "node-geocoder": "^3.22.0"
+  }
+}
