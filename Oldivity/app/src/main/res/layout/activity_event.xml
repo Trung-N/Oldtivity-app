@@ -47,6 +47,19 @@
         </LinearLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/callState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+
     <Button
         android:id="@+id/callHostButton"
         android:layout_width="125dp"
