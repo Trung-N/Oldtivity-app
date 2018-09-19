@@ -43,7 +43,6 @@
         <activity android:name=".GroupChatActivity" />
         <activity android:name=".JoinEvent" />
         <activity android:name=".MainChatActivity" />
-        <activity android:name=".call" />
         <activity android:name=".EventActivity"></activity>
     </application>
 
