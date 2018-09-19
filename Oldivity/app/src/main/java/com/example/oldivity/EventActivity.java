@@ -30,8 +30,6 @@ public class EventActivity extends AppCompatActivity {
     private TextView title;
     private TextView description;
     private String hostNumber;
-
-    private static final String PHONE_NO = "+61431214410";
     private static final String APP_KEY = "4baa9405-610f-4a05-9544-93f6ffc51079";
     private static final String APP_SECRET = "Vqbd0fS35UO4RBOjPeYrcw==";
     private static final String ENVIRONMENT = "clientapi.sinch.com";
@@ -87,7 +85,7 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (call == null) {
-                    call = sinchClient.getCallClient().callPhoneNumber(PHONE_NO);
+                    call = sinchClient.getCallClient().callPhoneNumber(hostNumber);
                     call.addCallListener(new SinchCallListener());
                     button.setText("Hang Up");
                 }else {
