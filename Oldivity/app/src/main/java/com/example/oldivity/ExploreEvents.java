@@ -38,11 +38,16 @@ public class ExploreEvents extends AppCompatActivity {
         allEvents = new ArrayList<>();
         evAuth = FirebaseAuth.getInstance();
         Database = FirebaseDatabase.getInstance().getReference();
-        //mD
 
         recyclerView = findViewById(R.id.EventsList);
         ArrayList<Event> testEvents = testArray();
-        mAdapter = new EventsAdapter(testEvents);
+        mAdapter = new EventsAdapter(testEvents, new ClickListener() {
+            @Override
+            public void onPositionClicked(int position) {
+
+            }
+        });
+
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
