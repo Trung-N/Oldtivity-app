@@ -36,16 +36,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        /**unfinished**/
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser user = mAuth.getCurrentUser();
-        //updateUI(currentUser);
-    }
-
-
     //When login button is pressed
     public void SignIN(View view) {
         email = etUserEmail.getText().toString().trim();
