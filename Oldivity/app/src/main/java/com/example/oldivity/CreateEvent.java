@@ -11,7 +11,6 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,13 +34,8 @@ public class CreateEvent extends AppCompatActivity {
     private String title, loc, desc, date, phone;
     private CalendarView evCal;
     private FirebaseAuth evAuth;
-    private DatabaseReference Database, userDatabase, eventDatabase;
-    public String uId, eventId;
-    public boolean checkEvents;
-    Map<String, Object> members = new HashMap<>();
-    Map<String, Object> events = new HashMap<>();
-
-
+    private DatabaseReference Database, userDatabase;
+    public String uId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +50,21 @@ public class CreateEvent extends AppCompatActivity {
         //gets database and firebase authenticator instances and uid and phone number of user
         evAuth = FirebaseAuth.getInstance();
         Database = FirebaseDatabase.getInstance().getReference();
-        eventDatabase = FirebaseDatabase.getInstance().getReference("events");
         userDatabase = FirebaseDatabase.getInstance().getReference("users");
         FirebaseUser User = evAuth.getCurrentUser();
         uId = User.getUid();
         getUserInfo();
 
+    }
+
+    //copy and pasted from MainActivity
+    @Override
+    public void onStart() {
+        super.onStart();
+        /**unfinished**/
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser User = evAuth.getCurrentUser();
+        //updateUI(currentUser);
     }
 
     public void createEvent(View view){
@@ -71,39 +74,16 @@ public class CreateEvent extends AppCompatActivity {
         desc = evDescription.getText().toString().trim();
         date = getDate(evCal);
 
-
-        //check if all fields are filled
         if (!validateEntries()) {
             return;
         }
 
 
         //Push the new event to the branch /events/ in the database.
-        members.put(uId, true);
-        Event event = new Event(title, loc, desc, date, uId, phone, members);
 
-        DatabaseReference keyRef = eventDatabase.push();
-        eventId = keyRef.getKey();
+        Event event = new Event(title, loc, desc, date, uId, phone);
 
-        //Add event to user's list of events
-        eventDatabase.child(eventId).setValue(event, new DatabaseReference.CompletionListener(){
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference eventDatabase) {
-                if (databaseError != null) {
-
-                } else {
-                    if(checkEvents){
-                        userDatabase.child(uId).child("events").child(eventId).setValue(true);
-                    }
-                    else{
-                        events.put(eventId, true);
-                        userDatabase.child(uId).child("events").setValue(events);
-
-                }
-            }
-        }
-        });
-
+        Database.child("events").push().setValue(event);
         Log.w(TAG, "createEvent:success");
         Toast.makeText(CreateEvent.this, "Event successfully created!",
                 Toast.LENGTH_SHORT).show();
@@ -162,22 +142,12 @@ public class CreateEvent extends AppCompatActivity {
         return valid;
     }
 
-    //Gets user/event creator's information for use in event creation
+    //Gets user/event creator's phone number to attach to event
     public void getUserInfo(){
-        userDatabase.child(uId).addValueEventListener(new ValueEventListener() {
+        userDatabase.child(uId).child("number").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //get user's phone number to attach to event
-                phone = dataSnapshot.child("number").getValue().toString();
-
-                //checks to see if user has already joined any events
-                if(dataSnapshot.hasChild("events") ==true){
-                    checkEvents = true;
-                }
-                else{
-                    checkEvents = false;
-                }
+                phone = dataSnapshot.getValue().toString();
 
             }
 

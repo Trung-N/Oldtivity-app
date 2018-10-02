@@ -1,4 +1,6 @@
 package com.example.oldivity;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class Event {
@@ -11,17 +13,14 @@ public class Event {
     public String host;
     public String phoneNumber;
     public String distance;
-    public Map members;
 
-    public Event(String title, String location, String description, String date, String host, String phoneNumber, Map members) {
+    public Event(String title, String location, String description, String date, String host, String phoneNumber) {
         this.title = title;
         this.location = location;
         this.description = description;
         this.date = date;
         this.host = host;
         this.phoneNumber = phoneNumber;
-        this.members = members;
-
     }
 
     public Event(String id, String title, String location, String description, String date, String host, String phoneNumber, String distance) {
@@ -54,7 +53,5 @@ public class Event {
     public String getHost() { return host;}
 
     public String getPhoneNumber() { return phoneNumber; }
-
-    public Map getMembers() {return members;}
 }
 
