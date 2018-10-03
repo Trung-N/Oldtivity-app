@@ -43,7 +43,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="30sp"
                 tools:layout_editor_absoluteX="28dp"
-                tools:layout_editor_absoluteY="170dp" />
+                tools:layout_editor_absoluteY="170dp"
+                />
         </LinearLayout>
     </ScrollView>
 
@@ -61,9 +62,41 @@
 
 
     <Button
+        android:id="@+id/joinButton"
+        android:layout_width="338dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#0AA2CB"
+        android:fontFamily="ariel"
+        android:text="Join Event"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/callHostButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+    <Button
+        android:id="@+id/leaveButton"
+        android:layout_width="338dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#0AA2CB"
+        android:fontFamily="ariel"
+        android:text="Leave Event"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/callHostButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+    <Button
         android:id="@+id/callHostButton"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
+        android:layout_width="338dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="ariel"
@@ -72,19 +105,23 @@
         app:layout_constraintBottom_toTopOf="@+id/messageGroupButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/joinButton"
+        android:textColor="#FFFFFF"
+        android:background="#0AA2CB"/>
 
     <Button
         android:id="@+id/messageGroupButton"
         android:layout_width="338dp"
-        android:layout_height="69dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="ariel"
         android:text="Message Group"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/callHostButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#FFFFFF"
+        android:background="#0AA2CB"/>
 
 
 </android.support.constraint.ConstraintLayout>

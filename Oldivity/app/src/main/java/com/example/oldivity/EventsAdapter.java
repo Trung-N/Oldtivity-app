@@ -101,8 +101,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         Context context = view.getContext();
         Intent intent = new Intent(context, EventActivity.class);
         //formats event information into a string[] to be passed. Indexes: 0:title, 1:description,
-        //2:date, 3:host, 4:location, 5:phoneNumber
-        String[] eventString = {event.getTitle(),event.getDescription(),event.getDate(),event.getHost(),event.getLocation(),event.getPhoneNumber()};
+        //2:date, 3:host, 4:location, 5:phoneNumber, 6:distance, 7:eventId
+        String[] eventString = {event.getTitle(),event.getDescription(),event.getDate(),event.getHost(),event.getLocation(),event.getPhoneNumber(),event.getDistance(),event.getId()};
         intent.putExtra("eventDets",eventString);
         context.startActivity(intent);
     }

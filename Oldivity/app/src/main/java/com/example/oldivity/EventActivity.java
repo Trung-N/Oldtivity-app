@@ -1,6 +1,7 @@
 package com.example.oldivity;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -15,6 +16,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -23,28 +32,33 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.calling.CallListener;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView description;
-    private String hostNumber;
+    private String hostNumber, eventId, userId;
+    private DatabaseReference eventDatabase;
+    private FirebaseAuth mAuth;
 
-    private static final String PHONE_NO = "+61431214410";
+
     private static final String APP_KEY = "4baa9405-610f-4a05-9544-93f6ffc51079";
     private static final String APP_SECRET = "Vqbd0fS35UO4RBOjPeYrcw==";
     private static final String ENVIRONMENT = "clientapi.sinch.com";
 
     private Call call;
     private TextView callState;
-    private Button button;
+    private Button button, joinButton, leaveButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
 
         title = findViewById(R.id.displayEventTitle);
         description = findViewById(R.id.displayEventDescription);
@@ -53,12 +67,24 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String[] info = intent.getStringArrayExtra("eventDets");
 
+        eventId = info[7];
         hostNumber = info[5];
         title.setText(info[0]);
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "Distance" +info[6]+ "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
+        //Auth and database instances & references
+        mAuth = FirebaseAuth.getInstance();
+        eventDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventId).child("members");
+        FirebaseUser user = mAuth.getCurrentUser();
+        userId = user.getUid();
+
+        joinButton = findViewById(R.id.joinButton);
+        leaveButton = findViewById(R.id.leaveButton);
+
+        //Update UI depending on whether user is a member of event or not
+        updateUI();
 
 
         if (ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -83,16 +109,63 @@ public class EventActivity extends AppCompatActivity {
         button = findViewById(R.id.callHostButton);
         callState = findViewById(R.id.callState);
 
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                eventDatabase.child(userId).setValue(true);
+                joinButton.setVisibility(View.GONE);
+                leaveButton.setVisibility(View.VISIBLE);
+            }
+
+            });
+
+
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                eventDatabase.child(userId).removeValue();
+                leaveButton.setVisibility(View.GONE);
+                joinButton.setVisibility(View.VISIBLE);
+
+            }
+
+        });
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (call == null) {
-                    call = sinchClient.getCallClient().callPhoneNumber(PHONE_NO);
+                    call = sinchClient.getCallClient().callPhoneNumber(hostNumber);
                     call.addCallListener(new SinchCallListener());
                     button.setText("Hang Up");
                 }else {
                     call.hangup();
                 }
+
+            }
+        });
+
+
+
+    }
+
+    private void updateUI() {
+        eventDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(userId)) {
+                    joinButton.setVisibility(View.GONE);
+
+                } else{
+                    leaveButton.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

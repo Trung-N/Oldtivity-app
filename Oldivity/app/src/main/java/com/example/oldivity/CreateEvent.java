@@ -172,7 +172,7 @@ public class CreateEvent extends AppCompatActivity {
                 phone = dataSnapshot.child("number").getValue().toString();
 
                 //checks to see if user has already joined any events
-                if(dataSnapshot.hasChild("events") ==true){
+                if(dataSnapshot.hasChild("events")){
                     checkEvents = true;
                 }
                 else{

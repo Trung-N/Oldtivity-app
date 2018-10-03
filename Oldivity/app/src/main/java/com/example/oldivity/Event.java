@@ -35,6 +35,8 @@ public class Event {
         this.distance = distance;
     }
 
+    public String getId() {return id;}
+
     public String getTitle() {
         return title;
     }
@@ -54,6 +56,8 @@ public class Event {
     public String getHost() { return host;}
 
     public String getPhoneNumber() { return phoneNumber; }
+
+    public String getDistance() {return distance;}
 
     public Map getMembers() {return members;}
 }
