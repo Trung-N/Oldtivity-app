@@ -58,15 +58,24 @@ function eventGeocode(events, callback){
     for (var i = 0; i < events.length; i++){
         addresses.push(events[i][1]['location']);
     }
+    console.log(addresses);
     geocoder.batchGeocode(addresses, function (err, results) {
         // Return an array of type {error: false, value: []}
+        console.log(results);
         var geocodes = [];
         for (var j = 0; j < events.length; j++){
-            geo = Object.entries(Object.entries(results[j])[1][1][0]);
-            lat = geo[0][1];
-            lng = geo[1][1];
-            geocodes.push([lat, lng]);
+            if(Object.entries(results[j])[1][1].length>0){
+                geo = Object.entries(Object.entries(results[j])[1][1][0]);
+                lat = geo[0][1];
+                lng = geo[1][1];
+                geocodes.push([lat, lng]);
+            }
+            else{
+                geocodes.push([0, 0]);
+            }
+
         }
+        console.log(geocodes);
         callback(geocodes) ;
     });
 }
