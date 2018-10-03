@@ -11,7 +11,7 @@ var geocoder = NodeGeocoder({
     apiKey: '761238e07064497cb24af3499d16709b'
 });
 
-
+//Sends back future available events sort by distance
 module.exports.eventsearch = function(req,res){
     var db = admin.database();
     var ref = db.ref().child('events');
@@ -29,6 +29,7 @@ module.exports.eventsearch = function(req,res){
 
 };
 
+//Filter events to the ones that occur in the future
 function eventDateFilter(events){
     var currentDate = new Date();
     var eventSize = events.length;
@@ -45,6 +46,7 @@ function eventDateFilter(events){
     return events;
 }
 
+//Helper function to format results
 function arrayToJson(events){
     eventsJson = {};
     for(i = 0; i < events.length; i++){
@@ -53,6 +55,7 @@ function arrayToJson(events){
     return eventsJson;
 }
 
+//finds the geocodes for all events
 function eventGeocode(events, callback){
     addresses = [];
     for (var i = 0; i < events.length; i++){
@@ -80,6 +83,7 @@ function eventGeocode(events, callback){
     });
 }
 
+//Sorts events based on distance to user
 function distanceSort(events, geocodes, lat, lng){
     for (var i = 0; i< events.length; i++){
         events[i][1]['distance'] = distance(lat, lng, geocodes[i][0], geocodes[i][1]);
@@ -93,7 +97,7 @@ function distanceSort(events, geocodes, lat, lng){
     return events;
 }
 
-//function from https://snipplr.com/view/25479/calculate-distance-between-two-points-with-latitude-and-longitude-coordinates/
+//function to calculate distance from https://snipplr.com/view/25479/calculate-distance-between-two-points-with-latitude-and-longitude-coordinates/
 function distance(lat1,lon1,lat2,lon2) {
     var R = 6371;
     var dLat = (lat2-lat1) * Math.PI / 180;
