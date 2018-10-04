@@ -62,11 +62,11 @@
 
 
     <Button
-        android:id="@+id/joinButton"
+        android:id="@+id/joinLeaveButton"
         android:layout_width="338dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="6dp"
         android:background="#0AA2CB"
         android:fontFamily="ariel"
         android:text="Join Event"
@@ -77,21 +77,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-    <Button
-        android:id="@+id/leaveButton"
-        android:layout_width="338dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#0AA2CB"
-        android:fontFamily="ariel"
-        android:text="Leave Event"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/callHostButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <Button
         android:id="@+id/callHostButton"
@@ -105,7 +90,7 @@
         app:layout_constraintBottom_toTopOf="@+id/messageGroupButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinButton"
+        app:layout_constraintTop_toBottomOf="@+id/joinLeaveButton"
         android:textColor="#FFFFFF"
         android:background="#0AA2CB"/>
 

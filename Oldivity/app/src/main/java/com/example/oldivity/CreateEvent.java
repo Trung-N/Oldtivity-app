@@ -36,8 +36,8 @@ public class CreateEvent extends AppCompatActivity {
     private CalendarView evCal;
     private FirebaseAuth evAuth;
     private DatabaseReference Database, userDatabase, eventDatabase;
-    public String uId, eventId;
-    public boolean checkEvents;
+    private String uId, eventId;
+    private boolean checkEvents;
     Map<String, Object> members = new HashMap<>();
     Map<String, Object> events = new HashMap<>();
 

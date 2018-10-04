@@ -80,11 +80,11 @@ public class EventActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         userId = user.getUid();
 
-        joinButton = findViewById(R.id.joinButton);
-        leaveButton = findViewById(R.id.leaveButton);
+        joinButton = findViewById(R.id.joinLeaveButton);
+
 
         //Update UI depending on whether user is a member of event or not
-        updateUI();
+
 
 
         if (ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -112,24 +112,13 @@ public class EventActivity extends AppCompatActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                eventDatabase.child(userId).setValue(true);
-                joinButton.setVisibility(View.GONE);
-                leaveButton.setVisibility(View.VISIBLE);
+                updateDatabase();
+                updateUI();
+
             }
 
             });
 
-
-        leaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                eventDatabase.child(userId).removeValue();
-                leaveButton.setVisibility(View.GONE);
-                joinButton.setVisibility(View.VISIBLE);
-
-            }
-
-        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -151,16 +140,24 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+
+    }
+
+    private void updateDatabase() {
+
         eventDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(userId)) {
-                    joinButton.setVisibility(View.GONE);
 
-                } else{
-                    leaveButton.setVisibility(View.GONE);
+                if(dataSnapshot.hasChild(userId)) {
+                    eventDatabase.child(userId).removeValue();
 
                 }
+
+                else {
+                    eventDatabase.child(userId).setValue(true);
+                }
+
 
             }
 
