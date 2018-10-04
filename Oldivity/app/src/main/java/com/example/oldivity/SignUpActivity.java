@@ -59,16 +59,17 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //When Signup button is pressed
-    public void OK(View view) {
-        if (!validateEntries()) {
-            return;
-        }
+    public void signUp(View view) {
 
         firstName = tFirstName.getText().toString().trim();
         lastName = tLastName.getText().toString().trim();
         email = tEmail.getText().toString().trim();
         password = tPassword.getText().toString().trim();
         number = tNumber.getText().toString().trim();
+
+        if (!validateEntries(email, password, firstName, lastName, number)) {
+            return;
+        }
 
         //Create user authenticator & entry in user database
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -112,58 +113,43 @@ public class SignUpActivity extends AppCompatActivity {
      * field is empty and focuses on the input box
      */
 
-    private boolean validateEntries() {
+    public boolean validateEntries(String email, String password, String firstName,
+                                    String lastName, String number) {
         boolean valid = true;
+        boolean hasAtSign = email.indexOf("@") >=1;
 
-       String email = tEmail.getText().toString().trim();
-
-        if (TextUtils.isEmpty(email)) {
+        if (email.length()<1) {
             tEmail.setError("Email is required");
             tEmail.requestFocus();
             valid = false;
 
-        } else {
-            tEmail.setError(null);
+        }else if(!hasAtSign){
+            tEmail.setError("Valid Email is required");
+            tEmail.requestFocus();
+            valid = false;
         }
 
-        String password = tPassword.getText().toString().trim();
-
-        if (TextUtils.isEmpty(password)) {
+        if (password.length()<1) {
             tPassword.setError("Password is required");
             tPassword.requestFocus();
             valid = false;
-        } else {
-            tPassword.setError(null);
         }
-
-        String firstName = tFirstName.getText().toString().trim();
-
-        if (TextUtils.isEmpty(firstName)) {
+        if (firstName.length()<1) {
             tFirstName.setError("First Name is required");
             tFirstName.requestFocus();
             valid = false;
-        } else {
-            tFirstName.setError(null);
         }
 
-        String lastName = tLastName.getText().toString().trim();
-        if (TextUtils.isEmpty(lastName)) {
+        if (lastName.length()<1) {
             tLastName.setError("Last Name is required");
             tLastName.requestFocus();
             valid = false;
-        } else {
-            tLastName.setError(null);
         }
-
-        String number = tNumber.getText().toString().trim();
-        if (TextUtils.isEmpty(number)) {
+        if (number.length()<1) {
             tNumber.setError("Phone Number is required");
             tNumber.requestFocus();
             valid = false;
-        } else {
-            tNumber.setError(null);
         }
-
         return valid;
     }
 
