@@ -30,8 +30,6 @@ public class EventActivity extends AppCompatActivity {
     private TextView title;
     private TextView description;
     private String hostNumber;
-
-    private static final String PHONE_NO = "+61431214410";
     private static final String APP_KEY = "4baa9405-610f-4a05-9544-93f6ffc51079";
     private static final String APP_SECRET = "Vqbd0fS35UO4RBOjPeYrcw==";
     private static final String ENVIRONMENT = "clientapi.sinch.com";
@@ -39,6 +37,7 @@ public class EventActivity extends AppCompatActivity {
     private Call call;
     private TextView callState;
     private Button button;
+    private String eventaddreess;
 
 
     @Override
@@ -52,7 +51,7 @@ public class EventActivity extends AppCompatActivity {
         //retrieve passed event information
         Intent intent = getIntent();
         String[] info = intent.getStringArrayExtra("eventDets");
-
+        eventaddreess = info[4];
         hostNumber = info[5];
         title.setText(info[0]);
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
@@ -87,7 +86,7 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (call == null) {
-                    call = sinchClient.getCallClient().callPhoneNumber(PHONE_NO);
+                    call = sinchClient.getCallClient().callPhoneNumber(hostNumber);
                     call.addCallListener(new SinchCallListener());
                     button.setText("Hang Up");
                 }else {
@@ -99,7 +98,7 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-    private class SinchCallListener implements CallListener {
+    public class SinchCallListener implements CallListener {
         @Override
         public void onCallEnded(Call endedCall) {
             call = null;
@@ -124,7 +123,7 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    private class SinchCallClientListener implements CallClientListener {
+    public class SinchCallClientListener implements CallClientListener {
         @Override
         public void onIncomingCall(CallClient callClient, Call incomingCall) {
             call = incomingCall;
@@ -133,5 +132,12 @@ public class EventActivity extends AppCompatActivity {
             call.addCallListener(new SinchCallListener());
             button.setText("Hang Up");
         }
+    }
+
+    public void goToMap(View view) {
+
+        Intent intent = new Intent(EventActivity.this, MapsActivity.class);
+        intent.putExtra("address",eventaddreess);
+        startActivity(intent);
     }
 }

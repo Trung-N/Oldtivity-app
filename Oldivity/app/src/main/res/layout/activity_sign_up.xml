@@ -128,7 +128,7 @@
                 android:text="Sign Up"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp"
-                android:onClick="OK"
+                android:onClick="signUp"
                 android:visibility="visible" />
 
         </LinearLayout>
