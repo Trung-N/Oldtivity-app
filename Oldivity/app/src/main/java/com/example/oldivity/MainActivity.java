@@ -1,5 +1,6 @@
 package com.example.oldivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String password, email;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         // create the instance of Database
         mAuth = FirebaseAuth.getInstance();
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         email = etUserEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
 
-        if (!validateEntries()) {
+        if (!validateEntries(email, password)) {
             return;
         }
 
@@ -95,32 +96,28 @@ public class MainActivity extends AppCompatActivity {
      * field is empty and focuses on the input box
      */
 
-    private boolean validateEntries() {
+    public boolean validateEntries(String email, String password) {
         boolean valid = true;
-
-        String email = etUserEmail.getText().toString().trim();
-
-        if (TextUtils.isEmpty(email)) {
+        boolean hasAtSign = email.indexOf("@") >=1;
+        if (email.length()<1) {
             etUserEmail.setError("Email is required");
             etUserEmail.requestFocus();
             valid = false;
 
-        } else {
-            etUserEmail.setError(null);
+        }else if(!hasAtSign){
+            etUserEmail.setError("Valid Email is required");
+            etUserEmail.requestFocus();
+            valid = false;
+
         }
 
-        String password = etPassword.getText().toString().trim();
-
-        if (TextUtils.isEmpty(password)) {
+        if (password.length()<1) {
             etPassword.setError("Password is required");
             etPassword.requestFocus();
             valid = false;
-        } else {
-            etPassword.setError(null);
         }
         return valid;
     }
-
 
 
 }
