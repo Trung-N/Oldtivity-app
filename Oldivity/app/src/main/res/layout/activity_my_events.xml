@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MyEvents">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -50,10 +49,11 @@
             <ListView
                 android:layout_width="300dp"
                 android:layout_height="442dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="188dp" />
+                tools:layout_editor_absoluteY="396dp" />
 
 
         </LinearLayout>
