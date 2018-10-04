@@ -20,7 +20,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     private List<Event> events;
     private final ClickListener listener;
     //add or remove colours from here at will
-    private String[] colours = {"#a8c0fc", "#fffdaf","#FFE5CE","#E4BD9C","#E94D3C","#E8925F","#92BFC1","#E57A80","#EFE0A3"};
+    private String[] colours = {"#60d3fe", "#00739a", "#00838f", "#4fb3bf", "#005662", "#092327","#0B5351", "#00A9A5","#4E8098","#90C2E7"};
 
     //The viewholder for the RecylerView that holds the events
     //initialises everything as specified in list_event_display.xml and defines onClick behaviour
@@ -101,8 +101,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         Context context = view.getContext();
         Intent intent = new Intent(context, EventActivity.class);
         //formats event information into a string[] to be passed. Indexes: 0:title, 1:description,
-        //2:date, 3:host, 4:location, 5:phoneNumber
-        String[] eventString = {event.getTitle(),event.getDescription(),event.getDate(),event.getHost(),event.getLocation(),event.getPhoneNumber()};
+        //2:date, 3:host, 4:location, 5:phoneNumber, 6:distance, 7:eventId
+        String[] eventString = {event.getTitle(),event.getDescription(),event.getDate(),event.getHost(),event.getLocation(),event.getPhoneNumber(),event.getDistance(),event.getId()};
         intent.putExtra("eventDets",eventString);
         context.startActivity(intent);
     }

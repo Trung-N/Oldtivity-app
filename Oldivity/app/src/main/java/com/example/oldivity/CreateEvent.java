@@ -32,14 +32,15 @@ public class CreateEvent extends AppCompatActivity {
     private static final String TAG = "EventCreation";
 
     private EditText evTitle, evLocation, evDescription;
-    private String title, loc, desc, date, phone;
+    private String title, loc, desc, date, phone, fName, lName, hostName;
     private CalendarView evCal;
     private FirebaseAuth evAuth;
     private DatabaseReference Database, userDatabase, eventDatabase;
-    public String uId, eventId;
-    public boolean checkEvents;
-    Map<String, Object> members = new HashMap<>();
+    private String uId, eventId;
+    private boolean checkEvents;
     Map<String, Object> events = new HashMap<>();
+    Map<String, Object> thisMember = new HashMap<>();
+
 
 
 
@@ -79,8 +80,8 @@ public class CreateEvent extends AppCompatActivity {
 
 
         //Push the new event to the branch /events/ in the database.
-        members.put(uId, true);
-        Event event = new Event(title, loc, desc, date, uId, phone, members);
+        thisMember.put(uId,true);
+        Event event = new Event(title, loc, desc, date, hostName, phone, thisMember);
 
         DatabaseReference keyRef = eventDatabase.push();
         eventId = keyRef.getKey();
@@ -92,6 +93,7 @@ public class CreateEvent extends AppCompatActivity {
                 if (databaseError != null) {
 
                 } else {
+
                     if(checkEvents){
                         userDatabase.child(uId).child("events").child(eventId).setValue(true);
                     }
@@ -164,15 +166,20 @@ public class CreateEvent extends AppCompatActivity {
 
     //Gets user/event creator's information for use in event creation
     public void getUserInfo(){
+
         userDatabase.child(uId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //get user's phone number to attach to event
                 phone = dataSnapshot.child("number").getValue().toString();
+                fName = dataSnapshot.child("firstName").getValue().toString();
+                lName = dataSnapshot.child("lastName").getValue().toString();
+                hostName = fName + " "+ lName;
+
 
                 //checks to see if user has already joined any events
-                if(dataSnapshot.hasChild("events") ==true){
+                if(dataSnapshot.hasChild("events")){
                     checkEvents = true;
                 }
                 else{

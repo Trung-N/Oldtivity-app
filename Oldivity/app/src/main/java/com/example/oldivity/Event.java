@@ -13,6 +13,7 @@ public class Event {
     public String distance;
     public Map members;
 
+
     public Event(String title, String location, String description, String date, String host, String phoneNumber, Map members) {
         this.title = title;
         this.location = location;
@@ -35,6 +36,8 @@ public class Event {
         this.distance = distance;
     }
 
+    public String getId() {return id;}
+
     public String getTitle() {
         return title;
     }
@@ -54,6 +57,8 @@ public class Event {
     public String getHost() { return host;}
 
     public String getPhoneNumber() { return phoneNumber; }
+
+    public String getDistance() {return distance;}
 
     public Map getMembers() {return members;}
 }

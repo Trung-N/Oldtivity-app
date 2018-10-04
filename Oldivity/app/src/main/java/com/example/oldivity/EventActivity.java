@@ -1,6 +1,7 @@
 package com.example.oldivity;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -15,6 +16,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -23,21 +32,30 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.calling.CallListener;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView description;
-    private String hostNumber;
+    private DatabaseReference eventDatabase, userDatabase;
+    private FirebaseAuth mAuth;
+
+
     private static final String APP_KEY = "4baa9405-610f-4a05-9544-93f6ffc51079";
     private static final String APP_SECRET = "Vqbd0fS35UO4RBOjPeYrcw==";
     private static final String ENVIRONMENT = "clientapi.sinch.com";
 
     private Call call;
     private TextView callState;
-    private Button button;
+    private Button button, joinButton;
+
     private String eventaddreess;
+    private String hostNumber, eventId, userId;
+    private Boolean isMember;
+
 
 
     @Override
@@ -45,20 +63,36 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
+        //Views
         title = findViewById(R.id.displayEventTitle);
         description = findViewById(R.id.displayEventDescription);
+        joinButton = findViewById(R.id.joinLeaveButton);
+        button = findViewById(R.id.callHostButton);
+        callState = findViewById(R.id.callState);
 
         //retrieve passed event information
         Intent intent = getIntent();
         String[] info = intent.getStringArrayExtra("eventDets");
+
+        eventId = info[7];
         eventaddreess = info[4];
         hostNumber = info[5];
         title.setText(info[0]);
+
+        //Format for UI display
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
+        //Auth and database instances & references
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        userId = user.getUid();
+        userDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("events");
+        eventDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventId).child("members");
 
+        //Update UI depending on whether user is a member of event or not
+        updateUI();
 
         if (ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(EventActivity.this,
@@ -78,9 +112,27 @@ public class EventActivity extends AppCompatActivity {
         sinchClient.startListeningOnActiveConnection();
         sinchClient.start();
 
+        //When Join/Leave button is clicked, update button UI, update databases
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
 
-        button = findViewById(R.id.callHostButton);
-        callState = findViewById(R.id.callState);
+                if(!isMember){
+                    eventDatabase.child(userId).setValue(true);
+                    userDatabase.child(eventId).setValue(true);
+                    updateUI();
+
+                } else {
+                    eventDatabase.child(userId).removeValue();
+                    userDatabase.child(eventId).removeValue();
+                    updateUI();
+
+                }
+            }
+
+            });
+
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +147,32 @@ public class EventActivity extends AppCompatActivity {
 
             }
         });
+
     }
+
+
+
+    //Update UI of join/leave button depending on event membership status
+    private void updateUI() {
+        eventDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(userId)) {
+                    isMember = true;
+                    joinButton.setText("Leave Event");
+                } else {
+                    isMember = false;
+                    joinButton.setText("Join Event");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
+    }
+
+
 
 
     public class SinchCallListener implements CallListener {
