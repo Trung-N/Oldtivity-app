@@ -38,8 +38,9 @@ public class CreateEvent extends AppCompatActivity {
     private DatabaseReference Database, userDatabase, eventDatabase;
     private String uId, eventId;
     private boolean checkEvents;
-    Map<String, Object> members = new HashMap<>();
     Map<String, Object> events = new HashMap<>();
+    Map<String, Object> thisMember = new HashMap<>();
+
 
 
 
@@ -79,8 +80,8 @@ public class CreateEvent extends AppCompatActivity {
 
 
         //Push the new event to the branch /events/ in the database.
-        members.put(uId, true);
-        Event event = new Event(title, loc, desc, date, uId, phone, members);
+        thisMember.put(uId,true);
+        Event event = new Event(title, loc, desc, date, uId, phone, thisMember);
 
         DatabaseReference keyRef = eventDatabase.push();
         eventId = keyRef.getKey();
@@ -92,6 +93,7 @@ public class CreateEvent extends AppCompatActivity {
                 if (databaseError != null) {
 
                 } else {
+
                     if(checkEvents){
                         userDatabase.child(uId).child("events").child(eventId).setValue(true);
                     }

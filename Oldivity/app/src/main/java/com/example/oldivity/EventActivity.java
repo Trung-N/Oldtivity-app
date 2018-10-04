@@ -40,8 +40,7 @@ public class EventActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView description;
-    private String hostNumber, eventId, userId;
-    private DatabaseReference eventDatabase;
+    private DatabaseReference eventDatabase, userDatabase;
     private FirebaseAuth mAuth;
 
 
@@ -51,9 +50,12 @@ public class EventActivity extends AppCompatActivity {
 
     private Call call;
     private TextView callState;
-    private Button button, joinButton, leaveButton;
+    private Button button, joinButton;
 
     private String eventaddreess;
+    private String hostNumber, eventId, userId;
+    private Boolean isMember;
+
 
 
     @Override
@@ -64,6 +66,7 @@ public class EventActivity extends AppCompatActivity {
 
         title = findViewById(R.id.displayEventTitle);
         description = findViewById(R.id.displayEventDescription);
+        joinButton = findViewById(R.id.joinLeaveButton);
 
         //retrieve passed event information
         Intent intent = getIntent();
@@ -76,21 +79,20 @@ public class EventActivity extends AppCompatActivity {
         hostNumber = info[5];
         title.setText(info[0]);
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "Distance" +info[6]+ "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "\n" + "Distance" +info[6]+ "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
         //Auth and database instances & references
         mAuth = FirebaseAuth.getInstance();
         eventDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventId).child("members");
+        userDatabase = FirebaseDatabase.getInstance().getReference("events");
         FirebaseUser user = mAuth.getCurrentUser();
         userId = user.getUid();
 
-        joinButton = findViewById(R.id.joinLeaveButton);
 
 
         //Update UI depending on whether user is a member of event or not
-
-
+        updateUI();
 
         if (ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(EventActivity.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(EventActivity.this,
@@ -117,9 +119,17 @@ public class EventActivity extends AppCompatActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                updateDatabase();
-                updateUI();
 
+                if(isMember){
+                    eventDatabase.child(userId).removeValue();
+                    userDatabase.child(eventId).removeValue();
+                    isMember = false;
+
+                } else{
+                    eventDatabase.child(userId).setValue(true);
+                    userDatabase.child(eventId).setValue(true);
+                    isMember = true;
+                }
             }
 
             });
@@ -140,38 +150,31 @@ public class EventActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
+
+
 
     private void updateUI() {
-
-    }
-
-    private void updateDatabase() {
-
-        eventDatabase.addValueEventListener(new ValueEventListener() {
+        eventDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.hasChild(userId)) {
-                    eventDatabase.child(userId).removeValue();
-
+                if (dataSnapshot.hasChild(userId)) {
+                    isMember = true;
+                    joinButton.setText("Leave Event");
+                } else {
+                    isMember = false;
+                    joinButton.setText("Join Event");
                 }
-
-                else {
-                    eventDatabase.child(userId).setValue(true);
-                }
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                throw databaseError.toException();
             }
         });
     }
+
+
 
 
     public class SinchCallListener implements CallListener {
