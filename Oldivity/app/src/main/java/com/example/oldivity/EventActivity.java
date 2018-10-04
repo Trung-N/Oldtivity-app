@@ -53,6 +53,8 @@ public class EventActivity extends AppCompatActivity {
     private TextView callState;
     private Button button, joinButton, leaveButton;
 
+    private String eventaddreess;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,9 @@ public class EventActivity extends AppCompatActivity {
         String[] info = intent.getStringArrayExtra("eventDets");
 
         eventId = info[7];
+
+        eventaddreess = info[4];
+
         hostNumber = info[5];
         title.setText(info[0]);
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
@@ -169,7 +174,7 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-    private class SinchCallListener implements CallListener {
+    public class SinchCallListener implements CallListener {
         @Override
         public void onCallEnded(Call endedCall) {
             call = null;
@@ -194,7 +199,7 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    private class SinchCallClientListener implements CallClientListener {
+    public class SinchCallClientListener implements CallClientListener {
         @Override
         public void onIncomingCall(CallClient callClient, Call incomingCall) {
             call = incomingCall;
@@ -203,5 +208,12 @@ public class EventActivity extends AppCompatActivity {
             call.addCallListener(new SinchCallListener());
             button.setText("Hang Up");
         }
+    }
+
+    public void goToMap(View view) {
+
+        Intent intent = new Intent(EventActivity.this, MapsActivity.class);
+        intent.putExtra("address",eventaddreess);
+        startActivity(intent);
     }
 }

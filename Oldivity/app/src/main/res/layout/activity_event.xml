@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -86,27 +87,46 @@
         android:layout_marginTop="8dp"
         android:fontFamily="ariel"
         android:text="Call Host"
+        android:background="#0AA2CB"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/messageGroupButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinLeaveButton"
-        android:textColor="#FFFFFF"
-        android:background="#0AA2CB"/>
+        app:layout_constraintTop_toBottomOf="@+id/joinLeaveButton"/>
 
     <Button
         android:id="@+id/messageGroupButton"
         android:layout_width="338dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#0AA2CB"
         android:fontFamily="ariel"
         android:text="Message Group"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         app:layout_constraintTop_toBottomOf="@id/callHostButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/mapButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/mapButton"
+        android:layout_width="338dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="goToMap"
+        android:fontFamily="ariel"
+        android:text="Navigate"
+        android:background="#0AA2CB"
         android:textColor="#FFFFFF"
-        android:background="#0AA2CB"/>
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@id/messageGroupButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>
