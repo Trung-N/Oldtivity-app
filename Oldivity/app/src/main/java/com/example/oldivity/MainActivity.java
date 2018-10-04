@@ -1,6 +1,5 @@
 package com.example.oldivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String password, email;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,22 +35,13 @@ public class MainActivity extends AppCompatActivity {
         // create the instance of Database
         mAuth = FirebaseAuth.getInstance();
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        /**unfinished**/
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser user = mAuth.getCurrentUser();
-        //updateUI(currentUser);
-    }
-
 
     //When login button is pressed
     public void SignIN(View view) {
         email = etUserEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
 
-        if (!validateEntries(email, password)) {
+        if (!validateEntries()) {
             return;
         }
 
@@ -96,28 +85,32 @@ public class MainActivity extends AppCompatActivity {
      * field is empty and focuses on the input box
      */
 
-    public boolean validateEntries(String email, String password) {
+    private boolean validateEntries() {
         boolean valid = true;
-        boolean hasAtSign = email.indexOf("@") >=1;
-        if (email.length()<1) {
+
+        String email = etUserEmail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
             etUserEmail.setError("Email is required");
             etUserEmail.requestFocus();
             valid = false;
 
-        }else if(!hasAtSign){
-            etUserEmail.setError("Valid Email is required");
-            etUserEmail.requestFocus();
-            valid = false;
-
+        } else {
+            etUserEmail.setError(null);
         }
 
-        if (password.length()<1) {
+        String password = etPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(password)) {
             etPassword.setError("Password is required");
             etPassword.requestFocus();
             valid = false;
+        } else {
+            etPassword.setError(null);
         }
         return valid;
     }
+
 
 
 }
