@@ -32,7 +32,7 @@ public class CreateEvent extends AppCompatActivity {
     private static final String TAG = "EventCreation";
 
     private EditText evTitle, evLocation, evDescription;
-    private String title, loc, desc, date, phone;
+    private String title, loc, desc, date, phone, fName, lName, hostName;
     private CalendarView evCal;
     private FirebaseAuth evAuth;
     private DatabaseReference Database, userDatabase, eventDatabase;
@@ -81,7 +81,7 @@ public class CreateEvent extends AppCompatActivity {
 
         //Push the new event to the branch /events/ in the database.
         thisMember.put(uId,true);
-        Event event = new Event(title, loc, desc, date, uId, phone, thisMember);
+        Event event = new Event(title, loc, desc, date, hostName, phone, thisMember);
 
         DatabaseReference keyRef = eventDatabase.push();
         eventId = keyRef.getKey();
@@ -166,12 +166,17 @@ public class CreateEvent extends AppCompatActivity {
 
     //Gets user/event creator's information for use in event creation
     public void getUserInfo(){
+
         userDatabase.child(uId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //get user's phone number to attach to event
                 phone = dataSnapshot.child("number").getValue().toString();
+                fName = dataSnapshot.child("firstName").getValue().toString();
+                lName = dataSnapshot.child("lastName").getValue().toString();
+                hostName = fName + " "+ lName;
+
 
                 //checks to see if user has already joined any events
                 if(dataSnapshot.hasChild("events")){

@@ -18,21 +18,21 @@
         android:textSize="30sp"
         android:layout_margin="5dp"
         android:layout_centerVertical="true"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="#FFFFFF"
         tools:text="@tools:sample/lorem" />
 
     <Button
         android:id="@+id/eventListButton"
         android:layout_width="110dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
         android:background="#0AA2CB"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:textColor="#FFFFFF"
-        android:textSize="10sp"
-        tools:text="@tools:sample/lorem" />
+        android:textSize="20sp"
+        tools:text="View" />
 
 </LinearLayout>

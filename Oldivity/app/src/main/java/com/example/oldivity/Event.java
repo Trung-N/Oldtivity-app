@@ -13,6 +13,7 @@ public class Event {
     public String distance;
     public Map members;
 
+
     public Event(String title, String location, String description, String date, String host, String phoneNumber, Map members) {
         this.title = title;
         this.location = location;

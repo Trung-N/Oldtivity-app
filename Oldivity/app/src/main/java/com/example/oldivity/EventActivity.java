@@ -63,33 +63,33 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-
+        //Views
         title = findViewById(R.id.displayEventTitle);
         description = findViewById(R.id.displayEventDescription);
         joinButton = findViewById(R.id.joinLeaveButton);
+        button = findViewById(R.id.callHostButton);
+        callState = findViewById(R.id.callState);
 
         //retrieve passed event information
         Intent intent = getIntent();
         String[] info = intent.getStringArrayExtra("eventDets");
 
         eventId = info[7];
-
         eventaddreess = info[4];
-
         hostNumber = info[5];
         title.setText(info[0]);
+
+        //Format for UI display
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "\n" + "Distance" +info[6]+ "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
         //Auth and database instances & references
         mAuth = FirebaseAuth.getInstance();
-        eventDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventId).child("members");
-        userDatabase = FirebaseDatabase.getInstance().getReference("events");
         FirebaseUser user = mAuth.getCurrentUser();
         userId = user.getUid();
-
-
+        userDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("events");
+        eventDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventId).child("members");
 
         //Update UI depending on whether user is a member of event or not
         updateUI();
@@ -112,23 +112,21 @@ public class EventActivity extends AppCompatActivity {
         sinchClient.startListeningOnActiveConnection();
         sinchClient.start();
 
-
-        button = findViewById(R.id.callHostButton);
-        callState = findViewById(R.id.callState);
-
+        //When Join/Leave button is clicked, update button UI, update databases
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
 
-                if(isMember){
-                    eventDatabase.child(userId).removeValue();
-                    userDatabase.child(eventId).removeValue();
-                    isMember = false;
-
-                } else{
+                if(!isMember){
                     eventDatabase.child(userId).setValue(true);
                     userDatabase.child(eventId).setValue(true);
-                    isMember = true;
+                    updateUI();
+
+                } else {
+                    eventDatabase.child(userId).removeValue();
+                    userDatabase.child(eventId).removeValue();
+                    updateUI();
+
                 }
             }
 
@@ -154,6 +152,7 @@ public class EventActivity extends AppCompatActivity {
 
 
 
+    //Update UI of join/leave button depending on event membership status
     private void updateUI() {
         eventDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -166,7 +165,6 @@ public class EventActivity extends AppCompatActivity {
                     joinButton.setText("Join Event");
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 throw databaseError.toException();
