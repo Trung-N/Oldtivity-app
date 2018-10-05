@@ -1,14 +1,11 @@
 package com.example.oldivity;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.TextView;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,9 +29,7 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.calling.CallListener;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -50,7 +45,7 @@ public class EventActivity extends AppCompatActivity {
 
     private Call call;
     private TextView callState;
-    private Button button, joinButton;
+    private Button button, joinButton, messageGroupButton;
 
     private String eventaddreess;
     private String hostNumber, eventId, userId;
@@ -69,6 +64,7 @@ public class EventActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.joinLeaveButton);
         button = findViewById(R.id.callHostButton);
         callState = findViewById(R.id.callState);
+        messageGroupButton = findViewById(R.id.messageGroupButton);
 
         //retrieve passed event information
         Intent intent = getIntent();
@@ -145,6 +141,14 @@ public class EventActivity extends AppCompatActivity {
                     call.hangup();
                 }
 
+            }
+        });
+        messageGroupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(v.getContext(), GroupChatActivity.class);
+                intent.putExtra("groupName", title.getText().toString());
+                startActivityForResult(intent, 1);
             }
         });
 

@@ -14,24 +14,18 @@ public class TabsAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         switch(i){
-            case 0:
-                ChatsFragment chatsFragment = new ChatsFragment();
-                return chatsFragment;
 
-            case 1:
+            case 0:
                 GroupsFragment groupsFragment = new GroupsFragment();
                 return groupsFragment;
-            case 2:
 
-                FriendsFragment friendsFragment = new FriendsFragment();
-                return friendsFragment;
                 default:
                     return null;
         }
     }
 
     public int getCount() {
-        return 3;
+        return 1;
     }
 
     @Nullable
@@ -39,12 +33,8 @@ public class TabsAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         switch(position){
             case 0:
-                return "Chats";
-
-            case 1:
                 return "Groups";
-            case 2:
-                return "Friends";
+
             default:
                 return null;
         }

@@ -17,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -29,6 +27,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private DatabaseReference mUserDatabase;
     public String curTime;
     private FirebaseAuth mAuth;
+
     public MessageAdapter(List<Messages> mMessageList) {
 
         this.mMessageList = mMessageList;
@@ -58,7 +57,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             displayName = (TextView) view.findViewById(R.id.name_text_layout);
             messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
             time_text_layout = (TextView) view.findViewById(R.id.time_text_layout);
-            messageText.setGravity(Gravity.RIGHT | Gravity.END);
         }
     }
 
@@ -69,14 +67,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         Messages c = mMessageList.get(i);
         String from_user = c.getFrom();
         String message_type = c.getType();
-        if(from_user.equals(curUerID)){
-            viewHolder.messageText.setBackgroundColor(Color.WHITE);
-            viewHolder.messageText.setTextColor(Color.BLACK);
+        final String time = c.getTime();
 
-        }else{
-            viewHolder.messageText.setBackgroundColor(Color.BLUE);
-            viewHolder.messageText.setTextColor(Color.WHITE);
-        }
+
 
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(from_user);
@@ -89,7 +82,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 String lastName = dataSnapshot.child("lastName").getValue().toString();
 
                 viewHolder.displayName.setText(firstName + " " + lastName);
-                viewHolder.time_text_layout.setText(curTime);
+                viewHolder.time_text_layout.setText(time);
+
 
             }
 
@@ -99,18 +93,35 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         });
 
-        if(message_type.equals("text")) {
 
-            viewHolder.messageText.setText(c.getMessage());
+        viewHolder.messageText.setVisibility(View.GONE);
+        viewHolder.messageImage.setVisibility(View.GONE);
+        if(message_type.equals("text")) {
+            viewHolder.messageText.setVisibility(View.VISIBLE);
             viewHolder.messageImage.setVisibility(View.INVISIBLE);
-            System.out.println("message displayed");
+            viewHolder.messageText.setText(c.getMessage());
+            if(from_user.equals(curUerID)){
+                viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background2);
+                viewHolder.messageText.setTextColor(Color.BLACK);
+                viewHolder.displayName.setGravity(Gravity.RIGHT);
+                viewHolder.messageText.setGravity(Gravity.RIGHT);
+
+            }else{
+                viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background);
+                viewHolder.messageText.setTextColor(Color.WHITE);
+                viewHolder.displayName.setGravity(Gravity.LEFT);
+                viewHolder.messageText.setGravity(Gravity.LEFT);
+
+            }
+
+            System.out.println(c.getMessage());
+
 
 
         } else {
 
-            viewHolder.messageText.setVisibility(View.INVISIBLE);
+            viewHolder.messageImage.setVisibility(View.VISIBLE);
             Picasso.get().load(c.getMessage()).into(viewHolder.messageImage);
-            System.out.println("image displayed");
 
 
 
@@ -122,15 +133,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public int getItemCount() {
         return mMessageList.size();
     }
-    public void setTime(){
-        Calendar calForDate = Calendar.getInstance();
-        SimpleDateFormat curDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        String curDate = curDateFormat.format(calForDate.getTime());
 
-        Calendar calForTime = Calendar.getInstance();
-        SimpleDateFormat curTimeFormat = new SimpleDateFormat("hh:mm a");
-        curTime = curTimeFormat.format(calForTime.getTime()) + " " + curDate;
-    }
 
 
 
