@@ -34,14 +34,18 @@ function eventDateFilter(events){
     var currentDate = new Date();
     var eventSize = events.length;
     for (var i = eventSize-1; i >= 0; i--){
-        eventDate = events[i][1]['date'].split('/');
-        eventDate[1]--;
-        eventDate[0]++;
-        eventDate = new Date(eventDate[2], eventDate[1], (eventDate[0]));
-        if (eventDate<currentDate){
+        if(events[i][1].hasOwnProperty("date") && events[i][1].hasOwnProperty("location")){
+            eventDate = events[i][1]['date'].split('/');
+            eventDate[1]--;
+            eventDate[0]++;
+            eventDate = new Date(eventDate[2], eventDate[1], (eventDate[0]));
+            if (eventDate<currentDate){
+                events.splice(i, 1);
+            }
+        }
+        else{
             events.splice(i, 1);
         }
-
     }
     return events;
 }
