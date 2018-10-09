@@ -1,10 +1,10 @@
 package com.example.oldivity;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -23,8 +23,8 @@ import okhttp3.FormBody;
 
 public class ExploreEvents extends AppCompatActivity {
 
-    private TextView testTextView;
     private ArrayList<Event> allEvents;
+    private TextView testTextView;
     private FirebaseAuth evAuth;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
