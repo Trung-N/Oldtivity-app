@@ -11,6 +11,20 @@ var geocoder = NodeGeocoder({
     apiKey: '761238e07064497cb24af3499d16709b'
 });
 
+//Find an event by its id and returns its details
+module.exports.event = function(req,res){
+    var db = admin.database();
+    var ref = db.ref().child('events');
+    var events = [];
+    ref.once("value", function(snapshot){
+        events = snapshot.val();
+        var id = req.body.id;
+        console.log(events);
+        res.send(200, events[id]);
+    });
+
+};
+
 //Sends back future available events sort by distance
 module.exports.eventsearch = function(req,res){
     var db = admin.database();
@@ -23,7 +37,7 @@ module.exports.eventsearch = function(req,res){
             var lat = req.body.latitude;
             var lng = req.body.longitude;
             events = distanceSort(events, geocodes, lat, lng);
-            res.send(arrayToJson(events));
+            res.send(200, arrayToJson(events));
         });
     });
 
@@ -68,7 +82,6 @@ function eventGeocode(events, callback){
     console.log(addresses);
     geocoder.batchGeocode(addresses, function (err, results) {
         // Return an array of type {error: false, value: []}
-        console.log(results);
         var geocodes = [];
         for (var j = 0; j < events.length; j++){
             if(Object.entries(results[j])[1][1].length>0){
