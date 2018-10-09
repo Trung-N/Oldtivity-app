@@ -25,6 +25,25 @@ module.exports.event = function(req,res){
 
 };
 
+//Sends back future available events sort by date
+module.exports.events = function(req,res){
+    var db = admin.database();
+    var ref = db.ref().child('events');
+    var events = [];
+    ref.once("value", function(snapshot){
+        events = Object.entries(snapshot.val());
+        eventDateFilter(events);
+        eventGeocodes = eventGeocode(events,function(geocodes){
+            var lat = req.body.latitude;
+            var lng = req.body.longitude;
+            events = distanceSort(events, geocodes, lat, lng);
+            events = dateSort(events, geocodes, lat, lng);
+            res.send(200, arrayToJson(events));
+        });
+    });
+
+};
+
 //Sends back future available events sort by distance
 module.exports.eventsearch = function(req,res){
     var db = admin.database();
@@ -107,6 +126,27 @@ function distanceSort(events, geocodes, lat, lng){
         function Comparator(a, b) {
             if (a[1]['distance'] < b[1]['distance']) return -1;
             if (a[1]['distance'] > b[1]['distance']) return 1;
+            return 0;
+        }
+        events = events.sort(Comparator);
+    }
+    return events;
+}
+
+//Sorts events based on date
+function dateSort(events){
+    for (var i = 0; i< events.length; i++){
+        function Comparator(a, b) {
+            eventDate = a[1]['date'].split('/');
+            eventDate[1]--;
+            eventDate[0]++;
+            eventDate = new Date(eventDate[2], eventDate[1], (eventDate[0]));
+            if (a[1]['date'].split('/')[2] < b[1]['date'].split('/')[2]) return -1;
+            if (a[1]['date'].split('/')[2] > b[1]['date'].split('/')[2]) return 1;
+            if (a[1]['date'].split('/')[1] < b[1]['date'].split('/')[1]) return -1;
+            if (a[1]['date'].split('/')[1] > b[1]['date'].split('/')[1]) return 1;
+            if (a[1]['date'].split('/')[0] < b[1]['date'].split('/')[0]) return -1;
+            if (a[1]['date'].split('/')[0] > b[1]['date'].split('/')[0]) return 1;
             return 0;
         }
         events = events.sort(Comparator);
