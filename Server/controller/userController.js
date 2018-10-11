@@ -11,6 +11,39 @@ var geocoder = NodeGeocoder({
     apiKey: '761238e07064497cb24af3499d16709b'
 });
 
+//Find an event by its id and returns its details
+module.exports.event = function(req,res){
+    var db = admin.database();
+    var ref = db.ref().child('events');
+    var events = [];
+    ref.once("value", function(snapshot){
+        events = snapshot.val();
+        var id = req.body.id;
+        console.log(events);
+        res.send(200, events[id]);
+    });
+
+};
+
+//Sends back future available events sort by date
+module.exports.events = function(req,res){
+    var db = admin.database();
+    var ref = db.ref().child('events');
+    var events = [];
+    ref.once("value", function(snapshot){
+        events = Object.entries(snapshot.val());
+        eventDateFilter(events);
+        eventGeocodes = eventGeocode(events,function(geocodes){
+            var lat = req.body.latitude;
+            var lng = req.body.longitude;
+            events = distanceSort(events, geocodes, lat, lng);
+            events = dateSort(events, geocodes, lat, lng);
+            res.send(200, arrayToJson(events));
+        });
+    });
+
+};
+
 //Sends back future available events sort by distance
 module.exports.eventsearch = function(req,res){
     var db = admin.database();
@@ -23,7 +56,7 @@ module.exports.eventsearch = function(req,res){
             var lat = req.body.latitude;
             var lng = req.body.longitude;
             events = distanceSort(events, geocodes, lat, lng);
-            res.send(arrayToJson(events));
+            res.send(200, arrayToJson(events));
         });
     });
 
@@ -68,7 +101,6 @@ function eventGeocode(events, callback){
     console.log(addresses);
     geocoder.batchGeocode(addresses, function (err, results) {
         // Return an array of type {error: false, value: []}
-        console.log(results);
         var geocodes = [];
         for (var j = 0; j < events.length; j++){
             if(Object.entries(results[j])[1][1].length>0){
@@ -94,6 +126,27 @@ function distanceSort(events, geocodes, lat, lng){
         function Comparator(a, b) {
             if (a[1]['distance'] < b[1]['distance']) return -1;
             if (a[1]['distance'] > b[1]['distance']) return 1;
+            return 0;
+        }
+        events = events.sort(Comparator);
+    }
+    return events;
+}
+
+//Sorts events based on date
+function dateSort(events){
+    for (var i = 0; i< events.length; i++){
+        function Comparator(a, b) {
+            eventDate = a[1]['date'].split('/');
+            eventDate[1]--;
+            eventDate[0]++;
+            eventDate = new Date(eventDate[2], eventDate[1], (eventDate[0]));
+            if (a[1]['date'].split('/')[2] < b[1]['date'].split('/')[2]) return -1;
+            if (a[1]['date'].split('/')[2] > b[1]['date'].split('/')[2]) return 1;
+            if (a[1]['date'].split('/')[1] < b[1]['date'].split('/')[1]) return -1;
+            if (a[1]['date'].split('/')[1] > b[1]['date'].split('/')[1]) return 1;
+            if (a[1]['date'].split('/')[0] < b[1]['date'].split('/')[0]) return -1;
+            if (a[1]['date'].split('/')[0] > b[1]['date'].split('/')[0]) return 1;
             return 0;
         }
         events = events.sort(Comparator);
