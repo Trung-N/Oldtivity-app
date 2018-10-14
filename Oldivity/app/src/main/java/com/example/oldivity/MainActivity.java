@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
      * field is empty and focuses on the input box
      */
 
-    private boolean validateEntries() {
+    public boolean validateEntries() {
         boolean valid = true;
 
         String email = etUserEmail.getText().toString().trim();
