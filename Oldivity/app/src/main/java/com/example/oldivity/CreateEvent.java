@@ -110,8 +110,8 @@ public class CreateEvent extends AppCompatActivity {
         Toast.makeText(CreateEvent.this, "Event successfully created!",
                 Toast.LENGTH_SHORT).show();
 
-        //Moves to 'My Events' page after event successfully created
-        startActivity(new Intent(CreateEvent.this, MyEvents.class));
+        //Moves to 'profile' page after event successfully created
+        startActivity(new Intent(CreateEvent.this, profile.class));
     }
 
 
