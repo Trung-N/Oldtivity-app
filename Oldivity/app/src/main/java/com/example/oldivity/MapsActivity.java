@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -52,12 +53,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float zoom;
     private  LatLng newLocation;
     private LatLng userLocation;
+    Marker a,b;
 
     ArrayList<LatLng> MarkerPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        zoom = 15;
+        zoom = 10;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -103,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Output format
         String output = "json";
-        String key = "@string/google_maps_key";
+        String key = "AIzaSyDtjmPihog5Drivvs8tcOrVV5pt6UgDgHk";
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" +key;
@@ -228,54 +230,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onLocationChanged(Location location) {
 
-                mMap.clear();
+                a.remove();
+                b.remove();
+
 
                 userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-                String newsnippet = String.format(Locale.getDefault(),
-                        "Lat: %1$.5f, Long: %2$.5f",
-                        newLocation.latitude,
-                        newLocation.longitude);
-                String usersnippet = String.format(Locale.getDefault(),
-                        "Lat: %1$.5f, Long: %2$.5f",
-                        userLocation.latitude,
-                        userLocation.longitude);
 
-                mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker").snippet(usersnippet));
-                mMap.addMarker(new MarkerOptions().position(newLocation).title("new Marker").snippet(newsnippet));
+                a = mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
+                b = mMap.addMarker(new MarkerOptions().position(newLocation).title("new Marker"));
 
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,zoom));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation,zoom));
 
                 Toast.makeText(MapsActivity.this, userLocation.toString(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(MapsActivity.this, newLocation.toString(), Toast.LENGTH_SHORT).show();
 
 
-                // Already two locations
-                if (MarkerPoints.size() > 1) {
-                    MarkerPoints.clear();
-                    mMap.clear();
-                }
-
                 // Adding new item to the ArrayList
+               // MarkerPoints[0].setPosi;
                 MarkerPoints.add(userLocation);
                 MarkerPoints.add(newLocation);
 
 
-                // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 2) {
-                    LatLng origin = MarkerPoints.get(0);
-                    LatLng dest = MarkerPoints.get(1);
+                LatLng origin = MarkerPoints.get(0);
+                LatLng dest = MarkerPoints.get(1);
 
-                    // Getting URL to the Google Directions API
-                    String url = getUrl(origin, dest);
-                    Log.d("onMapClick", url);
-                    FetchUrl FetchUrl = new FetchUrl();
+                // Getting URL to the Google Directions API
+                String url = getUrl(origin, dest);
+                Log.d("onMapClick", url);
+                FetchUrl FetchUrl = new FetchUrl();
 
-                    // Start downloading json data from Google Directions API
-                    FetchUrl.execute(url);
-                }
+                // Start downloading json data from Google Directions API
+                FetchUrl.execute(url);
+
+
             }
 
 
@@ -305,14 +292,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
             LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            LatLng newLocation = getLocationFromAddress(this, locationName);
+
 
             mMap.clear();
 
-            mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
+            a = mMap.addMarker(new MarkerOptions().position(userLocation).title("user Marker"));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+            b = mMap.addMarker(new MarkerOptions().position(newLocation).title("destination"));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,zoom));
 
             Toast.makeText(MapsActivity.this, userLocation.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapsActivity.this, newLocation.toString(), Toast.LENGTH_SHORT).show();
+            MarkerPoints.clear();
+            // Adding new item to the ArrayList
+            MarkerPoints.add(userLocation);
+            MarkerPoints.add(newLocation);
+
+
+            LatLng origin = MarkerPoints.get(0);
+            LatLng dest = MarkerPoints.get(1);
+
+            // Getting URL to the Google Directions API
+            String url = getUrl(origin, dest);
+            Log.d("onMapClick", url);
+            FetchUrl FetchUrl = new FetchUrl();
+
+            // Start downloading json data from Google Directions API
+            FetchUrl.execute(url);
 
 
         } else {

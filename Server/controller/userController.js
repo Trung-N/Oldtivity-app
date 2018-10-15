@@ -130,6 +130,13 @@ function distanceSort(events, geocodes, lat, lng){
         }
         events = events.sort(Comparator);
     }
+    return addKm(events);
+}
+
+function addKm(events){
+    for (var i = 0; i< events.length; i++){
+        events[i][1]['distance'] = events[i][1]['distance']+" km";
+    }
     return events;
 }
 

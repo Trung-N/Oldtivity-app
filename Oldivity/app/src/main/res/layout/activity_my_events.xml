@@ -10,42 +10,24 @@
         android:id="@+id/textView"
         android:layout_width="346dp"
         android:layout_height="62dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Events I have joined:"
+        android:layout_marginEnd="3dp"
+        android:text="My Joined Events:"
         android:textColor="@android:color/black"
         android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createEvent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/createEvent"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginTop="8dp"
-        android:background="#0AA2CB"
-        android:lineSpacingExtra="20sp"
-        android:onClick="createEvent"
-        android:text="Create Event"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/event_recyclerView"
         android:layout_width="398dp"
         android:layout_height="492dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </android.support.constraint.ConstraintLayout>
