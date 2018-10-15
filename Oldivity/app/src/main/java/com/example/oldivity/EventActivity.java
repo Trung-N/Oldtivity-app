@@ -77,7 +77,7 @@ public class EventActivity extends AppCompatActivity {
 
         //Format for UI display
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Number of Members: " + info[8] + "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
         //Auth and database instances & references

@@ -11,6 +11,7 @@ public class Event {
     public String host;
     public String phoneNumber;
     public String distance;
+    public String membersCount;
     public Map members;
 
 
@@ -25,7 +26,7 @@ public class Event {
 
     }
 
-    public Event(String id, String title, String location, String description, String date, String host, String phoneNumber, String distance) {
+    public Event(String id, String title, String location, String description, String date, String host, String phoneNumber, String distance, String membersCount) {
         this.id = id;
         this.title = title;
         this.location = location;
@@ -34,6 +35,7 @@ public class Event {
         this.host = host;
         this.phoneNumber = phoneNumber;
         this.distance = distance;
+        this.membersCount = membersCount;
     }
 
     public String getId() {return id;}
@@ -59,6 +61,8 @@ public class Event {
     public String getPhoneNumber() { return phoneNumber; }
 
     public String getDistance() {return distance;}
+
+    public String getMembersCount() {return membersCount;}
 
     public Map getMembers() {return members;}
 }
