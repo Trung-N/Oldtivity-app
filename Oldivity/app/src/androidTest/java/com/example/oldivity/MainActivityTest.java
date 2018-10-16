@@ -42,7 +42,7 @@ public class MainActivityTest{
     public void setUp(){
         Intents.init();
         MockitoAnnotations.initMocks(this);
-        
+
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
 
@@ -68,6 +68,14 @@ public class MainActivityTest{
         //TEST PASSES FOR BELOW
         //Intents.intending(IntentMatchers.anyIntent());
     }
+
+    /*MOCK TEST FOR INVALID LOGIN DETAILS. PASSES SO BETTER DB MOCKING IS REQUIRED
+    @Test
+    public void InvalidSignIn(){
+        changeText(false);
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());
+        Intents.intending(hasComponent(profile.class.getName()));
+    }*/
 
 
     /*MOCK TEST TO CHECK PROPER WORKING OF HELPER FUNCTIONS
