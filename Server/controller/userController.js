@@ -123,6 +123,7 @@ function eventGeocode(events, callback){
 function distanceSort(events, geocodes, lat, lng){
     for (var i = 0; i< events.length; i++){
         events[i][1]['distance'] = distance(lat, lng, geocodes[i][0], geocodes[i][1]);
+        events[i][1]['membersCount'] = countMembers(Object.entries(events[i][1]['members']));
         function Comparator(a, b) {
             if (a[1]['distance'] < b[1]['distance']) return -1;
             if (a[1]['distance'] > b[1]['distance']) return 1;
@@ -131,6 +132,16 @@ function distanceSort(events, geocodes, lat, lng){
         events = events.sort(Comparator);
     }
     return addKm(events);
+}
+
+function countMembers(members){
+    var count = 0;
+    for (var i = 0; i< members.length; i++){
+        if(members[i][1]){
+            count++;
+        }
+    }
+    return count;
 }
 
 function addKm(events){

@@ -151,7 +151,7 @@ public class MyEvents extends AppCompatActivity {
                 if(myEventIds.get(i).equals(key)){
 
                     JSONObject value = jsonObj.getJSONObject(key);
-                    returnEvents.add(new Event(key, value.getString("title"),value.getString("location"),value.getString("description"),value.getString("date"),value.getString("host"),value.getString("phoneNumber"), value.getString("distance")));
+                    returnEvents.add(new Event(key, value.getString("title"),value.getString("location"),value.getString("description"),value.getString("date"),value.getString("host"),value.getString("phoneNumber"), value.getString("distance"), value.getString("membersCount")));
                 }
             }
         }
