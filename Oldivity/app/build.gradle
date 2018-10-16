@@ -46,9 +46,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
+    androidTestImplementation 'org.mockito:mockito-android:2.13.0'
     implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    testImplementation 'org.mockito:mockito-core:2.11.0'
+    testImplementation 'org.mockito:mockito-core:2.13.0'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-places:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
