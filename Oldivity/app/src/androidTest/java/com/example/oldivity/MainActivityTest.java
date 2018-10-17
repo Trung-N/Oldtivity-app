@@ -37,7 +37,8 @@ public class MainActivityTest{
     //@Rule
     //public IntentsTestRule<MainActivity> mIntentsRule = new IntentsTestRule<>(MainActivity.class);
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp(){
@@ -96,29 +97,33 @@ public class MainActivityTest{
 
 
     //----------------------------------HELPER FUNCTIONS----------------------------------
-    public void validStringInit(){
+    private void validStringInit(){
         password = "Shityeah3";
         email = "nicstrashbag@gmail.com";
     }
 
-    public void invalidStringInit(){
+    private void invalidStringInit(){
         password = "notMyPassword";
         email = "nicstrashbag@gmail.com";
     }
 
-    public void clearText() {
-        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
-        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
+    private void clearText() {
+        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.clearText(),
+                ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.clearText(),
+                ViewActions.closeSoftKeyboard());
     }
 
-    public void changeText(Boolean validLogin) {
+    private void changeText(Boolean validLogin) {
         if(validLogin){
             validStringInit();
         }else{
             invalidStringInit();
         }
-        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.typeText(email), ViewActions.closeSoftKeyboard());
-        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.typeText(password), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.typeText(email),
+                ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.typeText(password),
+                ViewActions.closeSoftKeyboard());
     }
 
 }
