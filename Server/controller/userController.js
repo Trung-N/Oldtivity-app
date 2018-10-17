@@ -123,7 +123,12 @@ function eventGeocode(events, callback){
 function distanceSort(events, geocodes, lat, lng){
     for (var i = 0; i< events.length; i++){
         events[i][1]['distance'] = distance(lat, lng, geocodes[i][0], geocodes[i][1]);
-        events[i][1]['membersCount'] = countMembers(Object.entries(events[i][1]['members']));
+        if(events[i][1].hasOwnProperty("members")){
+            events[i][1]['membersCount'] = countMembers(Object.entries(events[i][1]['members']));
+        }
+        else{
+          events[i][1]['membersCount'] = 0;
+        }
         function Comparator(a, b) {
             if (a[1]['distance'] < b[1]['distance']) return -1;
             if (a[1]['distance'] > b[1]['distance']) return 1;
