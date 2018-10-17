@@ -7,6 +7,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,8 +21,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-
 @RunWith(MockitoJUnitRunner.class)
 @LargeTest
 public class MainActivityTest{
@@ -32,6 +31,8 @@ public class MainActivityTest{
     private DatabaseReference mockedDatabaseReference;
     @Mock
     private FirebaseDatabase mockedFirebaseDatabase;
+    @Mock
+    private FirebaseAuth mockedFirebaseAuth;
 
     //@Rule
     //public IntentsTestRule<MainActivity> mIntentsRule = new IntentsTestRule<>(MainActivity.class);
@@ -45,11 +46,9 @@ public class MainActivityTest{
 
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
+        mockedFirebaseAuth = Mockito.mock(FirebaseAuth.class);
 
         Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
-        //NOW IT COMPLETES THE TESTS BUT THERE IS NO INTENTS FIRED BY SIGNIN
-        //PowerMockito.mockStatic(FirebaseDatabase.class); GOES BEFORE FirebaseDatabase.getInstance()
-        //Mockito.when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);
     }
 
     @After
@@ -57,25 +56,27 @@ public class MainActivityTest{
         Intents.release();
     }
 
+    //Test sign in functionality for different credentials
     @Test
-    public void SignIn(){
-        changeText(true);
-        Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());
-
-        Intents.intending(hasComponent(profile.class.getName()));
-        //IT CRASHES AND THEN GOES TO THE WELCOME/PROFILE/LOGIN SCREEN
-        //Intents.intended(IntentMatchers.anyIntent());
-        //TEST PASSES FOR BELOW
-        //Intents.intending(IntentMatchers.anyIntent());
+    public void TestSignIn(){
+        invalidSignInTest();
+        clearText();
+        validSignInTest();
     }
 
-    /*MOCK TEST FOR INVALID LOGIN DETAILS. PASSES SO BETTER DB MOCKING IS REQUIRED
-    @Test
-    public void InvalidSignIn(){
+    //test for invalid credentials
+    public void invalidSignInTest(){
         changeText(false);
         Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());
-        Intents.intending(hasComponent(profile.class.getName()));
-    }*/
+        assert(mockedFirebaseAuth.getCurrentUser()==null);
+    }
+
+    //test for valid credentials
+    public void validSignInTest(){
+        changeText(true);
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());
+        assert(mockedFirebaseAuth.getCurrentUser()!=null);
+    }
 
 
     /*MOCK TEST TO CHECK PROPER WORKING OF HELPER FUNCTIONS
@@ -93,6 +94,8 @@ public class MainActivityTest{
         intended(hasComponent(SignUpActivity.class.getName()));
     }*/
 
+
+    //----------------------------------HELPER FUNCTIONS----------------------------------
     public void validStringInit(){
         password = "Shityeah3";
         email = "nicstrashbag@gmail.com";
@@ -101,6 +104,11 @@ public class MainActivityTest{
     public void invalidStringInit(){
         password = "notMyPassword";
         email = "nicstrashbag@gmail.com";
+    }
+
+    public void clearText() {
+        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
     }
 
     public void changeText(Boolean validLogin) {
