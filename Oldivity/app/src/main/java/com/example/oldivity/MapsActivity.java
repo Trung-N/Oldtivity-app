@@ -231,18 +231,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationChanged(Location location) {
 
                 a.remove();
-                b.remove();
-
 
                 userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-
                 a = mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
-                b = mMap.addMarker(new MarkerOptions().position(newLocation).title("new Marker"));
-
-
-                Toast.makeText(MapsActivity.this, userLocation.toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(MapsActivity.this, newLocation.toString(), Toast.LENGTH_SHORT).show();
 
 
                 // Adding new item to the ArrayList
@@ -261,14 +253,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Start downloading json data from Google Directions API
                 FetchUrl.execute(url);
-
-
             }
-
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
 
             }
 
@@ -281,7 +269,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onProviderDisabled(String provider) {
 
             }
-
 
         };
 
@@ -303,8 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,zoom));
 
-            Toast.makeText(MapsActivity.this, userLocation.toString(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(MapsActivity.this, newLocation.toString(), Toast.LENGTH_SHORT).show();
+
             MarkerPoints.clear();
             // Adding new item to the ArrayList
             MarkerPoints.add(userLocation);
