@@ -57,15 +57,15 @@ public class MainActivityTest{
         Intents.release();
     }
 
-    //Test sign in functionality for different credentials
-    @Test
-    public void TestSignIn(){
+    //combining tests
+    /*public void TestSignIn(){
         invalidSignInTest();
         clearText();
         validSignInTest();
-    }
+    }*/
 
     //test for invalid credentials
+    @Test
     public void invalidSignInTest(){
         changeText(false);
         Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());
@@ -73,6 +73,7 @@ public class MainActivityTest{
     }
 
     //test for valid credentials
+    @Test
     public void validSignInTest(){
         changeText(true);
         Espresso.onView(ViewMatchers.withId(R.id.buttonSignIn)).perform(ViewActions.click());

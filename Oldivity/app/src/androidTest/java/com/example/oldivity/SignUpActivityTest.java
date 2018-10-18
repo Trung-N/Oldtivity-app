@@ -3,14 +3,16 @@ package com.example.oldivity;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +23,14 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 
 //IMPORTANT: DISABLE ANIMATIONS ON TEST DEVICE TO PREVENT CRASHES (Espresso doesn't like animations)
 @RunWith(MockitoJUnitRunner.class)
@@ -29,11 +39,13 @@ public class SignUpActivityTest{
 
     private String firstName, lastName, email, password, number;
     @Mock
-    private DatabaseReference mockedDatabaseReference;
+    public DatabaseReference mockedDatabaseReference;
     @Mock
-    private FirebaseAuth mockedFirebaseAuth;
-    /*@Mock
-    private FirebaseDatabase mockedFirebaseDatabase;*/
+    public FirebaseAuth mockedFirebaseAuth;
+    @Mock
+    public FirebaseUser mockedUser;
+    @Mock
+    public FirebaseDatabase mockedFirebaseDatabase;
 
     @Rule
     public ActivityTestRule<SignUpActivity> mActivityRule = new
@@ -45,8 +57,14 @@ public class SignUpActivityTest{
         Intents.init();
         MockitoAnnotations.initMocks(this);
 
+        //mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
         mockedFirebaseAuth = Mockito.mock(FirebaseAuth.class);
+        //mockedUser = Mockito.mock(FirebaseUser.class);
+
+        //Mockito.when(mockedFirebaseAuth.getCurrentUser()).thenReturn(mockedUser);
+        //Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
+        Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(email,password)).thenCallRealMethod();
     }
 
     @After
@@ -59,44 +77,43 @@ public class SignUpActivityTest{
     public void createNewUser(){
         changeText();
         fillOutFields();
-        Espresso.onView(ViewMatchers.withId(R.id.buttonOK)).perform(click());
-        //Assert.assertEquals("aaa","aaa");
+        Espresso.onView(withId(R.id.buttonOK)).perform(click());
+        //Checks correct toast is displayed
+        Espresso.onView(withText("Account successfully created!"))//"Authentication failed."
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
     }
 
-    /*@Test
     public void testValidateEntries() {
         SignUpActivity SignUpActivity = new SignUpActivity();
         changeText();
         boolean result = SignUpActivity.validateEntries(email, password,
                 firstName, lastName, number);
         Assert.assertEquals(true, result);
-    }*/
+    }
 
     //--------------------------------HELPER FUNCTIONS-----------------------------------
     private void changeText(){
         email = "newUserEmail@gmail.com";
-        password = "superSecretPassword123";
+        password = "SecretPW123";
         firstName = "Easy";
         lastName = "Peter";
         number = "0419957797";
     }
 
-    //EMAIL FIELD IS BEING TEMPERAMENTAL. DOESN'T LIKE TO BE CLICKED OR FILLED?
+    //this function can be broken by changing other code. For some reason the Toast.check after
+    //button click and mocking a FireBaseUser can destabilise this.
+    //UPDATE: scrollTo() seems to have fixed this.
     private void fillOutFields(){
-        //Espresso.onView(ViewMatchers.withId(R.id.tFirstName)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.tFirstName)).perform(ViewActions
-                .typeText(firstName), ViewActions.closeSoftKeyboard());
-        //Espresso.onView(ViewMatchers.withId(R.id.tLastName)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.tLastName)).perform(ViewActions.typeText(lastName),
-                ViewActions.closeSoftKeyboard());
-        //Espresso.onView(ViewMatchers.withId(R.id.tEmail)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.tEmail)).perform(ViewActions.typeText(email),
-                ViewActions.closeSoftKeyboard());
-        //Espresso.onView(ViewMatchers.withId(R.id.tPassword)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.tPassword)).perform(ViewActions.typeText(password),
-                ViewActions.closeSoftKeyboard());
-        //Espresso.onView(ViewMatchers.withId(R.id.tNumber)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.tNumber)).perform(ViewActions.typeText(number),
-                ViewActions.closeSoftKeyboard());
+        Espresso.onView(withId(R.id.tFirstName)).perform(ViewActions.scrollTo(),typeText(firstName),
+                closeSoftKeyboard());
+        Espresso.onView(withId(R.id.tLastName)).perform(ViewActions.scrollTo(),typeText(lastName),
+                closeSoftKeyboard());
+        Espresso.onView(withId(R.id.tEmail)).perform(ViewActions.scrollTo(),typeText(email),
+                closeSoftKeyboard());
+        Espresso.onView(withId(R.id.tPassword)).perform(ViewActions.scrollTo(),typeText(password),
+                closeSoftKeyboard());
+        Espresso.onView(withId(R.id.tNumber)).perform(ViewActions.scrollTo(),typeText(number),
+                closeSoftKeyboard());
     }
 }
