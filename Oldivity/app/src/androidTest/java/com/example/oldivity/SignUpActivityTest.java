@@ -88,9 +88,8 @@ public class SignUpActivityTest{
                 .check(matches(isDisplayed()));
     }
 
-    /*
-    //@Test
     //Test for creating a new user with an existing email. PASSES
+    /*@Test
     public void createUserWithExistingEmail(){
         changeText(false);
         fillOutFields();
