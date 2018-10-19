@@ -6,14 +6,10 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,9 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -36,8 +30,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 
 //IMPORTANT: DISABLE ANIMATIONS ON TEST DEVICE TO PREVENT CRASHES (Espresso doesn't like animations)
 @RunWith(MockitoJUnitRunner.class)
@@ -45,7 +37,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 public class SignUpActivityTest{
 
     private String firstName, lastName, email, password, number;
-    private Task<AuthResult> task;
     @Mock
     public DatabaseReference mockedDatabaseReference;
     @Mock
@@ -54,6 +45,8 @@ public class SignUpActivityTest{
     public FirebaseUser mockedUser;
     @Mock
     public FirebaseDatabase mockedFirebaseDatabase;
+    @Mock
+    public user mockedRealUser;
 
     @Rule
     public ActivityTestRule<SignUpActivity> mActivityRule = new
@@ -65,16 +58,17 @@ public class SignUpActivityTest{
         Intents.init();
         MockitoAnnotations.initMocks(this);
 
+        mockedRealUser = Mockito.mock(user.class);
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
         mockedFirebaseAuth = Mockito.mock(FirebaseAuth.class);
-        //mockedUser = Mockito.mock(FirebaseUser.class);
+        mockedUser = Mockito.mock(FirebaseUser.class);
 
-        //Mockito.when(mockedFirebaseAuth.getCurrentUser()).thenReturn(mockedUser);
+        Mockito.when(mockedFirebaseAuth.getCurrentUser()).thenReturn(mockedUser);
         Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
-        Mockito.when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
-        
-        Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(email,password)).thenReturn(task);
+        Mockito.when(mockedDatabaseReference.child("users")).thenReturn(mockedDatabaseReference);
+
+        //Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(email,password)).thenReturn();
     }
 
     @After
@@ -85,43 +79,62 @@ public class SignUpActivityTest{
     //test creating a new user
     @Test
     public void createNewUser(){
-
-        Mockito.when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
-
-        Mockito.doAnswer(new Answer<Void>(){
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener valueEventListener =
-                        (ValueEventListener) invocation.getArguments()[0];
-                DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
-                valueEventListener.onDataChange(mockedDataSnapshot);
-                return null;
-            }
-
-        }).when(mockedDatabaseReference)
-                .addListenerForSingleValueEvent(any(ValueEventListener.class));
-
-        changeText();
+        changeText(true);
         fillOutFields();
         Espresso.onView(withId(R.id.buttonOK)).perform(click());
         //Checks correct toast is displayed
-        Espresso.onView(withText("Account successfully created!"))//"Authentication failed."
+        Espresso.onView(withText("Account successfully created!"))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
 
+    /*
+    //@Test
+    //Test for creating a new user with an existing email. PASSES
+    public void createUserWithExistingEmail(){
+        changeText(false);
+        fillOutFields();
+        Espresso.onView(withId(R.id.buttonOK)).perform(click());
+        //Checks correct toast is displayed
+        Espresso.onView(withText("Authentication failed."))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }*/
+
+    /*@Test
+    public void testEm(){
+        createUserWithExistingEmail();
+        //createNewUser();
+        onlyChangeEmail();
+    }
+
+    public void onlyChangeEmail(){
+        email = createNewRandomEmail();
+        Espresso.onView(withId(R.id.tEmail)).perform(ViewActions.scrollTo(),clearText());
+        Espresso.onView(withId(R.id.tEmail)).perform(ViewActions.scrollTo(),typeText(email),
+                closeSoftKeyboard());
+        Espresso.onView(withId(R.id.buttonOK)).perform(click());
+        //Checks correct toast is displayed
+        Espresso.onView(withText("Account successfully created!"))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }*/
+
     //--------------------------------HELPER FUNCTIONS-----------------------------------
-    private void changeText(){
-        email = "newUserEmail@gmail.com";
+    //changes text fields to be typed to either a new or existing email
+    private void changeText(Boolean valid){
+        if(valid){
+            email = createNewRandomEmail();
+        }else{
+            email = "newUserEmail@gmail.com";
+        }
         password = "SecretPW123";
         firstName = "Easy";
         lastName = "Peter";
         number = "0419957797";
     }
 
-    //this function can be broken by changing other code. For some reason the Toast.check after
-    //button click and mocking a FireBaseUser can destabilise this.
-    //UPDATE: scrollTo() seems to have fixed this.
+    //fills out fields with text
     private void fillOutFields(){
         Espresso.onView(withId(R.id.tFirstName)).perform(ViewActions.scrollTo(),typeText(firstName),
                 closeSoftKeyboard());
@@ -133,5 +146,18 @@ public class SignUpActivityTest{
                 closeSoftKeyboard());
         Espresso.onView(withId(R.id.tNumber)).perform(ViewActions.scrollTo(),typeText(number),
                 closeSoftKeyboard());
+    }
+
+    //generates a new random email
+    private String createNewRandomEmail() {
+        String result = "a";
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int n = alphabet.length();
+        java.util.Random rnd = new java.util.Random();
+        for(int i=0;i<6;i++){
+            result = result + alphabet.charAt(rnd.nextInt(n));
+        }
+        result = result + "@gmail.com";
+        return result;
     }
 }
