@@ -6,13 +6,16 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,7 +23,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -31,6 +36,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 //IMPORTANT: DISABLE ANIMATIONS ON TEST DEVICE TO PREVENT CRASHES (Espresso doesn't like animations)
 @RunWith(MockitoJUnitRunner.class)
@@ -38,6 +45,7 @@ import static org.hamcrest.core.IsNot.not;
 public class SignUpActivityTest{
 
     private String firstName, lastName, email, password, number;
+    private Task<AuthResult> task;
     @Mock
     public DatabaseReference mockedDatabaseReference;
     @Mock
@@ -57,14 +65,16 @@ public class SignUpActivityTest{
         Intents.init();
         MockitoAnnotations.initMocks(this);
 
-        //mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
+        mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
         mockedFirebaseAuth = Mockito.mock(FirebaseAuth.class);
         //mockedUser = Mockito.mock(FirebaseUser.class);
 
         //Mockito.when(mockedFirebaseAuth.getCurrentUser()).thenReturn(mockedUser);
-        //Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
-        Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(email,password)).thenCallRealMethod();
+        Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
+        Mockito.when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
+        
+        Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(email,password)).thenReturn(task);
     }
 
     @After
@@ -75,6 +85,22 @@ public class SignUpActivityTest{
     //test creating a new user
     @Test
     public void createNewUser(){
+
+        Mockito.when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
+
+        Mockito.doAnswer(new Answer<Void>(){
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener valueEventListener =
+                        (ValueEventListener) invocation.getArguments()[0];
+                DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
+                valueEventListener.onDataChange(mockedDataSnapshot);
+                return null;
+            }
+
+        }).when(mockedDatabaseReference)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         changeText();
         fillOutFields();
         Espresso.onView(withId(R.id.buttonOK)).perform(click());
@@ -82,14 +108,6 @@ public class SignUpActivityTest{
         Espresso.onView(withText("Account successfully created!"))//"Authentication failed."
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
-    }
-
-    public void testValidateEntries() {
-        SignUpActivity SignUpActivity = new SignUpActivity();
-        changeText();
-        boolean result = SignUpActivity.validateEntries(email, password,
-                firstName, lastName, number);
-        Assert.assertEquals(true, result);
     }
 
     //--------------------------------HELPER FUNCTIONS-----------------------------------
