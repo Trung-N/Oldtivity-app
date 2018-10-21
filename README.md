@@ -37,7 +37,7 @@ We used [Heroku](https://heroku.com/) to host the server.
 ## Testing 
 Tests can be found in the [Oldivity/app/src/test/java/com/example/oldivity](https://github.com/COMP30022-18/Oldtivity_server/tree/UI/Oldivity/app/src/test/java/com/example/oldivity) folder.
 
-Sever tests were made using chai and mocha and can be found int the [Sever/test](https://github.com/COMP30022-18/Oldtivity_server/tree/UI/Server/test) folader. Sever tests can be run with the command npm test.
+Sever tests were made using chai and mocha and can be found int the [Sever/test](https://github.com/COMP30022-18/Oldtivity_server/tree/UI/Server/test) folder. Sever tests can be run with the command npm test.
 
 ## Built With 
 [Firebase](https://firebase.google.com/) - Webhost for database
