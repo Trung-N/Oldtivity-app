@@ -8,6 +8,7 @@ Olditivity is an android application whose primary users are the elderly. The ap
 * User accounts
 * Create events
 * Explore events
+* Join or leave events
 * Send messages & images with event group members
 * Navigate to events with GPS
 * Call event host 
@@ -55,7 +56,7 @@ Sever tests were made using chai and mocha and can be found int the [Sever/test]
 
 [Node-geocoder](https://www.npmjs.com/package/node-geocoder) - API for geocodes
 
-[Express](https://expressjs.com/) - Ndoe.js framework
+[Express](https://expressjs.com/) - Node.js framework
 
 [Heroku](https://www.heroku.com/) - Sever web host
 
