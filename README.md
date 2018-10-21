@@ -50,7 +50,7 @@ Sever tests were made using chai and mocha and can be found int the [Sever/test]
 
 [Mockito](https://site.mockito.org/) - App testing
 
-[Espresso](https://developer.android.com/training/testing/espresso/) - App tsting
+[Espresso](https://developer.android.com/training/testing/espresso/) - App testing
 
 [Node.js](https://nodejs.org/en/) - Sever environment
 
@@ -79,7 +79,5 @@ Sever tests were made using chai and mocha and can be found int the [Sever/test]
   Nicholas Sujecki
   
   Xinbo Sun
-
-## Acknowledgements
 
 
