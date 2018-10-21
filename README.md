@@ -16,7 +16,7 @@ Olditivity is an android application whose potential users are the elderly. In t
 8. Navigate to the event location
 
 ## Testing
-Tests can be found in the [app/src/test/java/com/example/oldivity](https://github.com/COMP3002218/Oldtivity_server/tree/UI/Oldivity/app/src/test/java/com/example/oldivity) folder.
+Tests can be found in the [app/src/test/java/com/example/oldivity](https://github.com/COMP30022-18/Oldtivity_server/tree/UI/Oldivity/app/src/test/java/com/example/oldivity) folder.
 
 ## Build With
 
