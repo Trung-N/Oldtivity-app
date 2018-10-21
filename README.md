@@ -1,89 +1,38 @@
-# Olditivity
+# COMP30022 IT-Project: Olditivity
+
+
 
 Olditivity is an android application whose potential users are the elderly. In this app, users can create & join events. It allows users to navigate to the event location, message members and call the event host.
 
-## Getting Started
+## Installation and Usage
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+1. Import into Android Studio
+2. Do a gradle build
+3. Run on emulator or an android phone
+4. Create an account and log in
+5. Create or join an event
+6. Send message/ pictures in the group chat
+7. Call the host
+8. Navigate to the event location
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+## Testing
+Tests can be found in the [app/src/test/java/ark/ark](https://github.com/COMP30022/ARK/tree/master/app/src/test/java/ark/ark) folder.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+- [Wikitude](https://www.wikitude.com) - an all-in-one augmented reality SDK with geolocation functionality. 
+- [Amazon Web Services](https://aws.amazon.com/) - for all backend server operations and processing.
+- [Google Maps Android API](https://developers.google.com/maps/documentation/android-api/)
+- [Google Maps Places API](https://developers.google.com/places/android-api/)
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+- Austin Huang
+- Jane Ho
+- Kyaw Min Htin
+- Michael Zeng
+- Sam Chung
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+## Acknowledgements
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
-
+- The [TextDrawable](https://github.com/amulyakhare/TextDrawable) library for the rendering of custom user icons. 
