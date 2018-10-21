@@ -64,9 +64,10 @@ Sever tests were made using chai and mocha and can be found int the [Sever/test]
 
 [Mocha](https://mochajs.org/) - Server testing
 
+[Picasso](http://square.github.io/picasso/) - Download and resize pictures
 
 
-
+ - Download and resize pictures
 ## Authors
 
   Teresa Lieu
