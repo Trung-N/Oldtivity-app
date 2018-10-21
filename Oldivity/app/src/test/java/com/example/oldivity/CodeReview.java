@@ -15,23 +15,28 @@ public class Controller {
     // Button that is pressed to do the calculation.
     Button calculateButton =
             (Button) UI.getElementById("CALCULATE_BUTTON");
+
     // Source and destination post code for frieght.
     TextField sourecPostCodeField =
             (TextField) UI.getElementById("SOURCE_POST_CODE");
     TextField destinationPostCodeField =
             (TextField) UI.getElementById("DESTINATION_POST_CODE");
+
     // Label that displays the cost of the freight to the user.
     TextLabel costLabel = (TextLabel)
             UI.getElementById("COST_LABEL");
+
     // List of all valid post codes, used during validation.
     List<String> validPostCodes = new ArrayList<String>();
     AddressTools addressTools = new AddressTools();
+
     public Controller() {
         // Fill in the list of valid post codes.
  ...
  ...
  ...
     }
+
     public void calculateButtonPressed {
 
         if (!this.validPostCodes.contains(
@@ -39,6 +44,7 @@ public class Controller {
             new Alert("Source post code isn't valid.").show();
             return;
         }
+
         if (!this.validPostCodes.contains(
                 this.destinationPostCodeField.text())) {
             new Alert("Destination post code isn't valid.").show();
@@ -46,12 +52,14 @@ public class Controller {
         }
 
         Location sloc = this.addressTools.locationFromAddress(
-
                 Address.fromPostCode(this.sourcePostCodeField.text()));
+
         Location dloc = this.addressTools.locationFromAddress(
 
                 Address.fromPostCode(this.destinationPostCodeField.text()));
+
         Float distance = sloc.distanceTo(dloc);
+
         if (distance > 1000.0)
         {
             this.costLabel.setText("$10");
