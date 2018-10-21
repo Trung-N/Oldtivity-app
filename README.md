@@ -16,23 +16,18 @@ Olditivity is an android application whose potential users are the elderly. In t
 8. Navigate to the event location
 
 ## Testing
-Tests can be found in the [app/src/test/java/ark/ark](https://github.com/COMP30022/ARK/tree/master/app/src/test/java/ark/ark) folder.
+Tests can be found in the [app/src/test/java/com/example/oldivity](https://github.com/COMP3002218/Oldtivity_server/tree/UI/Oldivity/app/src/test/java/com/example/oldivity) folder.
 
-## Built With
-
-- [Wikitude](https://www.wikitude.com) - an all-in-one augmented reality SDK with geolocation functionality. 
-- [Amazon Web Services](https://aws.amazon.com/) - for all backend server operations and processing.
-- [Google Maps Android API](https://developers.google.com/maps/documentation/android-api/)
-- [Google Maps Places API](https://developers.google.com/places/android-api/)
+## Build With
 
 ## Authors
 
-- Austin Huang
-- Jane Ho
-- Kyaw Min Htin
-- Michael Zeng
-- Sam Chung
+  Teresa Lieu
+  Anita Naseri
+  Doan Minh Trung Nguyen
+  Nicholas Sujecki
+  Xinbo Sun
 
 ## Acknowledgements
 
-- The [TextDrawable](https://github.com/amulyakhare/TextDrawable) library for the rendering of custom user icons. 
+
