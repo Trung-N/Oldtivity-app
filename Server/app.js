@@ -21,5 +21,5 @@ app.use(bodyParser()); // get information from html forms
 require('./routes/routes.js')(app); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
+module.exports = app.listen(port);
 console.log('Express listening on port ' + port);
