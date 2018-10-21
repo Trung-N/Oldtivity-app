@@ -68,10 +68,6 @@ public class profile extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void friendsList(View view) {
-        Intent intent = new Intent(profile.this, FriendsList.class);
-        startActivity(intent);
-    }
 
     public void exploreEvents(View view) {
         Intent intent = new Intent(profile.this, ExploreEvents.class);

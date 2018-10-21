@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import okhttp3.FormBody;
-
+//This activity displays my events and has  basically the same functions as EventActivity
 public class MyEvents extends AppCompatActivity {
 
     private ArrayList<Event> allEvents;

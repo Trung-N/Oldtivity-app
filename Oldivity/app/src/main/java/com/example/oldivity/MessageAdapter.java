@@ -25,7 +25,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     private List<Messages> mMessageList;
     private DatabaseReference mUserDatabase;
-    public String curTime;
     private FirebaseAuth mAuth;
 
     public MessageAdapter(List<Messages> mMessageList) {
@@ -77,7 +76,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                //Display user name and time
                 String firstName = dataSnapshot.child("firstName").getValue().toString();
                 String lastName = dataSnapshot.child("lastName").getValue().toString();
 
@@ -96,10 +95,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         viewHolder.messageText.setVisibility(View.GONE);
         viewHolder.messageImage.setVisibility(View.GONE);
+        //Display text
         if(message_type.equals("text")) {
             viewHolder.messageText.setVisibility(View.VISIBLE);
             viewHolder.messageImage.setVisibility(View.INVISIBLE);
             viewHolder.messageText.setText(c.getMessage());
+            //Different colours for the user and others
             if(from_user.equals(curUerID)){
                 viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background2);
                 viewHolder.messageText.setTextColor(Color.BLACK);
@@ -117,10 +118,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             System.out.println(c.getMessage());
 
 
-
+        //Display picture
         } else {
 
             viewHolder.messageImage.setVisibility(View.VISIBLE);
+            //Size the image too avoid too large pictures covers the whole page or even more.
             Picasso.get().load(c.getMessage()).resize(700, 500).into(viewHolder.messageImage);
 
 

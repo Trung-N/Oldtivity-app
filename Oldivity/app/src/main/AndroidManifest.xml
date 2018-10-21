@@ -51,7 +51,6 @@
         <activity android:name=".profile" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MyEvents" />
-        <activity android:name=".FriendsList" />
         <activity android:name=".ExploreEvents" />
         <activity android:name=".CreateEvent" />
         <activity android:name=".GroupChatActivity" />

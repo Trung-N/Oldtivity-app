@@ -23,10 +23,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+// THIS class was built to display all groups but not required in final version because
+// there is already a list of events. But this may be useful if we want to add more functionalities
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class GroupsFragment extends Fragment {
     private View groupsView;
     private ListView list_view;

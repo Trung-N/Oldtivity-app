@@ -74,6 +74,7 @@ public class GroupChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
 
+        //Set toolbar and actionbar
         mChatToolbar = (Toolbar) findViewById(R.id.chat_app_bar);
         setSupportActionBar(mChatToolbar);
 
@@ -87,9 +88,13 @@ public class GroupChatActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        //get database ready to use
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUserId = mAuth.getCurrentUser().getUid();
+
+        //get the group name from the previous activity
         curGroupName = getIntent().getExtras().getString("groupName").toString();
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,11 +102,8 @@ public class GroupChatActivity extends AppCompatActivity {
 
         actionBar.setCustomView(action_bar_view);
 
-        // ---- Custom Action bar Items ----
-
+        //locate items in xml
         mTitleView = (TextView) findViewById(R.id.custom_bar_title);
-
-
         mChatAddBtn = (ImageButton) findViewById(R.id.chat_add_btn);
         mChatSendBtn = (Button) findViewById(R.id.chat_send_btn);
         mChatMessageView = (EditText) findViewById(R.id.chat_message_view);
@@ -110,8 +112,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
         mMessagesList = (RecyclerView) findViewById(R.id.messages_list);
         mMessagesList.stopScroll();
-        //
-        // mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.message_swipe_layout);
         mLinearLayout = new LinearLayoutManager(this);
 
 
@@ -122,17 +122,15 @@ public class GroupChatActivity extends AppCompatActivity {
         //------- IMAGE STORAGE ---------
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-
-
-
+        // Load messages when the activity is created
         loadMessages();
 
 
 
-
+        // show group name in bar title
         mTitleView.setText(":" + curGroupName);
 
-
+        //onClick
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,11 +141,10 @@ public class GroupChatActivity extends AppCompatActivity {
         });
 
 
-
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Open local gallery
                 Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -158,17 +155,15 @@ public class GroupChatActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
-
+    // Select picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
-
+            // get Uri and send to storage
             Uri imageUri = data.getData();
             final StorageReference filePath = mImageStorage.child("message_images").child(mCurrentUserId + ".jpg");
 
@@ -191,8 +186,9 @@ public class GroupChatActivity extends AppCompatActivity {
                             messageUserMap.put(key, messageMap);
                             messageUserMap.put(key, messageMap);
 
+                            //Clean text input
                             mChatMessageView.setText("");
-
+                            //Update messages
                             mRootRef.child("messages").child(curGroupName).updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -220,6 +216,7 @@ public class GroupChatActivity extends AppCompatActivity {
         DatabaseReference messageRef = mRootRef.child("messages").child(curGroupName);
         messageRef.addChildEventListener(new ChildEventListener() {
             @Override
+            // Notify adapter to manipulate messages
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Messages messages = dataSnapshot.getValue(Messages.class);
                 messagesList.add(messages);
@@ -251,14 +248,16 @@ public class GroupChatActivity extends AppCompatActivity {
 
     }
 
+
     private void sendMessage() {
 
-
+        //Catch the text message
         String message = mChatMessageView.getText().toString();
+
 
         if(!TextUtils.isEmpty(message)){
 
-
+            //Store message info into a hashmap and update to databse
             setTime();
             Map messageMap = new HashMap();
             messageMap.put("message", message);
@@ -293,7 +292,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
 
     }
-
 
 
     public void setTime(){
