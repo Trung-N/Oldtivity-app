@@ -81,7 +81,12 @@ public class GroupChatActivity extends AppCompatActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
-
+        mChatToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUserId = mAuth.getCurrentUser().getUid();

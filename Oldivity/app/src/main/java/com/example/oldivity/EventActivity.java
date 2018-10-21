@@ -77,7 +77,7 @@ public class EventActivity extends AppCompatActivity {
 
         //Format for UI display
         String descriptionFormatted = "Description: " + info[1] + "\n" + "Date: " + info[2] + "\n" +
-                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Hosted By: " + info[3];
+                "Location: " + info[4] + "\n" + "Distance: " +info[6]+ "\n" + "Number of Members: " + info[8] + "\n" + "Hosted By: " + info[3];
         description.setText(descriptionFormatted);
 
         //Auth and database instances & references
@@ -117,11 +117,15 @@ public class EventActivity extends AppCompatActivity {
                     eventDatabase.child(userId).setValue(true);
                     userDatabase.child(eventId).setValue(true);
                     updateUI();
+                    Toast.makeText(EventActivity.this, "Event joined!",
+                            Toast.LENGTH_SHORT).show();
 
                 } else {
                     eventDatabase.child(userId).removeValue();
                     userDatabase.child(eventId).removeValue();
                     updateUI();
+                    Toast.makeText(EventActivity.this, "Event left!",
+                            Toast.LENGTH_SHORT).show();
 
                 }
             }

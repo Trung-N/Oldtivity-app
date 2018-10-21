@@ -55,7 +55,6 @@
         <activity android:name=".ExploreEvents" />
         <activity android:name=".CreateEvent" />
         <activity android:name=".GroupChatActivity" />
-        <activity android:name=".JoinEvent" />
         <activity android:name=".MainChatActivity" />
         <activity android:name=".EventActivity" />
         <!--
@@ -68,7 +67,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyDtjmPihog5Drivvs8tcOrVV5pt6UgDgHk" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

@@ -82,6 +82,7 @@ function eventDateFilter(events){
     }
     return events;
 }
+module.exports.eventDateFilter = eventDateFilter;
 
 //Helper function to format results
 function arrayToJson(events){
@@ -91,6 +92,7 @@ function arrayToJson(events){
     }
     return eventsJson;
 }
+module.exports.arrayToJson = arrayToJson;
 
 //finds the geocodes for all events
 function eventGeocode(events, callback){
@@ -114,15 +116,21 @@ function eventGeocode(events, callback){
             }
 
         }
-        console.log(geocodes);
         callback(geocodes) ;
     });
 }
+module.exports.eventGeocode = eventGeocode;
 
 //Sorts events based on distance to user
 function distanceSort(events, geocodes, lat, lng){
     for (var i = 0; i< events.length; i++){
         events[i][1]['distance'] = distance(lat, lng, geocodes[i][0], geocodes[i][1]);
+        if(events[i][1].hasOwnProperty("members")){
+            events[i][1]['membersCount'] = countMembers(Object.entries(events[i][1]['members']));
+        }
+        else{
+            events[i][1]['membersCount'] = 0;
+        }
         function Comparator(a, b) {
             if (a[1]['distance'] < b[1]['distance']) return -1;
             if (a[1]['distance'] > b[1]['distance']) return 1;
@@ -132,6 +140,19 @@ function distanceSort(events, geocodes, lat, lng){
     }
     return events;
 }
+module.exports.distanceSort = distanceSort;
+
+//Counts number of members in an event
+function countMembers(members){
+    var count = 0;
+    for (var i = 0; i< members.length; i++){
+        if(members[i][1]){
+            count++;
+        }
+    }
+    return count;
+}
+module.exports.countMembers = countMembers;
 
 //Sorts events based on date
 function dateSort(events){
@@ -153,6 +174,7 @@ function dateSort(events){
     }
     return events;
 }
+module.exports.dateSort = dateSort;
 
 //function to calculate distance from https://snipplr.com/view/25479/calculate-distance-between-two-points-with-latitude-and-longitude-coordinates/
 function distance(lat1,lon1,lat2,lon2) {
@@ -166,3 +188,4 @@ function distance(lat1,lon1,lat2,lon2) {
     var d = R * c;
     return Math.round(d*100)/100;
 }
+module.exports.distance = distance;

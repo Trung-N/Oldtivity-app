@@ -29,8 +29,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="160dp"
+        android:text="test"
         android:textColor="@android:color/black"
-        android:textSize="50sp" />
+        android:textSize="60sp" />
 
 
     <Button
@@ -43,7 +44,7 @@
         android:background="#0AA2CB"
         android:lineSpacingExtra="20sp"
         android:onClick="createEvents"
-        android:text="CREATE AN EVENT NOW !"
+        android:text="Create Event"
         android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:visibility="visible"
