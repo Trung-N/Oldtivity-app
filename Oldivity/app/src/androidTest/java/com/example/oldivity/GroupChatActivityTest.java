@@ -35,12 +35,13 @@ public class GroupChatActivityTest {
 
     private String message;
     @Mock
-    public FirebaseAuth mockedFirebaseAuth;
+    private FirebaseAuth mockedFirebaseAuth;
     @Mock
-    public DatabaseReference mockedDatabaseReference;
+    private DatabaseReference mockedDatabaseReference;
     @Mock
-    public StorageReference mockedStorageReference;
+    private StorageReference mockedStorageReference;
 
+    //Override is to inject necessary intent extras into the mock
     @Rule
     public ActivityTestRule<GroupChatActivity> mActivityRule =
             new ActivityTestRule<GroupChatActivity>(GroupChatActivity.class) {
@@ -72,8 +73,13 @@ public class GroupChatActivityTest {
         Intents.release();
     }
 
-    //Test sending a message (PASSES)
     @Test
+    public void testWholeChatFunctionality(){
+        sendMessageTest();
+        addImageTest();
+    }
+
+    //Test sending a message (PASSES)
     public void sendMessageTest(){
         message = "my message";//setMessage();
         Espresso.onView(withId(R.id.chat_message_view)).perform(typeText(message));
@@ -82,15 +88,19 @@ public class GroupChatActivityTest {
 
     }
 
-    @Test
+    //Tests adding an image (that the navigation is correct (PASSES)
     public void addImageTest(){
         //HAVE TO VERIFY LOADING AN IMAGE
+        Espresso.onView(withId(R.id.chat_add_btn)).perform(click());
+        assert(!mActivityRule.getClass().getName().equals(GroupChatActivity.class.getName()));
     }
 
+    /*Can't really test this as there are no images on the emulator
+    //MOCK IMAGES?
     @Test
     public void sendImageTest(){
         //HAVE TO VERIFY SENDING THE LOADED IMAGE
-    }
+    }*/
 
     //randomises a string so duplicates don't cause test to fail over multiple iterations
     //UPDATE: duplicates do not cause the check(matches()) to fail

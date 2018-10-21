@@ -83,7 +83,7 @@ public class CreateEventTest {
         /*Espresso.onView(withText("Event successfully created!"))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));*/
-        assert(mActivityRule.getClass().getName()!=CreateEvent.class.getName());
+        assert(!mActivityRule.getClass().getName().equals(CreateEvent.class.getName()));
     }
 
     public void fillText(){
@@ -94,8 +94,6 @@ public class CreateEventTest {
                 typeText(location), closeSoftKeyboard());
         Espresso.onView(withId(R.id.eventDescription)).perform(ViewActions.scrollTo(),
                 typeText(description), closeSoftKeyboard());
-        /*Espresso.onView(withId(R.id.eventDate)).perform(ViewActions.scrollTo(),
-                PickerActions.setDate(2018,10,25));//HAVE TO CHANGE THIS LATER*/
     }
 
     //don't have to randomise as events can have the same name

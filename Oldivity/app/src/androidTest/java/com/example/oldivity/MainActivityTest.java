@@ -34,8 +34,6 @@ public class MainActivityTest{
     @Mock
     private FirebaseAuth mockedFirebaseAuth;
 
-    //@Rule
-    //public IntentsTestRule<MainActivity> mIntentsRule = new IntentsTestRule<>(MainActivity.class);
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -56,13 +54,6 @@ public class MainActivityTest{
     public void after(){
         Intents.release();
     }
-
-    //combining tests
-    /*public void TestSignIn(){
-        invalidSignInTest();
-        clearText();
-        validSignInTest();
-    }*/
 
     //test for invalid credentials
     @Test
@@ -106,13 +97,6 @@ public class MainActivityTest{
     private void invalidStringInit(){
         password = "notMyPassword";
         email = "nicstrashbag@gmail.com";
-    }
-
-    private void clearText() {
-        Espresso.onView(ViewMatchers.withId(R.id.Email)).perform(ViewActions.clearText(),
-                ViewActions.closeSoftKeyboard());
-        Espresso.onView(ViewMatchers.withId(R.id.Password)).perform(ViewActions.clearText(),
-                ViewActions.closeSoftKeyboard());
     }
 
     private void changeText(Boolean validLogin) {
